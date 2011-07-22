@@ -1,0 +1,40 @@
+#!/bin/sh
+
+URL=$1
+
+if [ -z "${URL}" ]; then
+	echo "Usage get_zp_content_url <ZP HTTP URL>"
+	exit 1
+fi
+
+TMP_DIR=/tmp
+HTML_FILE_NAME=`echo $URL | sed -re 's/.+\///'`
+OUTPUT_HTML_FILE=${TMP_DIR}/${HTML_FILE_NAME}
+
+wget -q $URL -O ${OUTPUT_HTML_FILE}
+
+JS_URL=`cat ${OUTPUT_HTML_FILE} | grep ".js" | grep config | sed -re s/^.+config=// | sed -re 's/(.+)js.+/\1/'`
+JS_URL=${JS_URL}js
+rm ${OUTPUT_HTML_FILE}
+
+JS_FILE=`echo ${JS_URL} | sed -re 's/.+\///'`
+OUTPUT_JS_FILE=${TMP_DIR}/${JS_FILE}
+
+wget -q ${JS_URL} -O ${OUTPUT_JS_FILE}
+
+CAN_EXIT=0;
+i=0;
+while [ ${CAN_EXIT} -eq 0 ]; do
+	i=`expr ${i} + 1`;
+	OUTPUT=`cat ${OUTPUT_JS_FILE} | cut -d \{ -f ${i} | grep mp4 | grep -v house-ad-rotation`;
+	if [ -n "${OUTPUT}" ]; then
+		CONTENT_URL=`echo ${OUTPUT} | sed -re 's/(.+)mp4.+/\1/' | sed -re "s/^.+url':'//"`
+		CAN_EXIT=1
+	fi
+done
+
+CONTENT_URL=${CONTENT_URL}mp4
+echo $CONTENT_URL
+rm ${OUTPUT_JS_FILE}
+
+wget ${CONTENT_URL} -O zp_${HTML_FILE_NAME}.mp4
