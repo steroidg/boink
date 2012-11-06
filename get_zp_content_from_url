@@ -11,6 +11,7 @@
 
 URL=${1}
 PROG_NAME=`basename $0`
+WGET_OPT="-U \"Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.6; en-US; rv:1.9.2.13) Gecko/20101203 Firefox/3.6.13\"";
 
 if [ -z "${URL}" ]; then
 	echo "Usage ${PROG_NAME} <ZP HTTP URL>"
@@ -21,18 +22,18 @@ fi
 TMP_DIR=/tmp
 HTML_FILE_NAME=`echo ${URL} | sed -re 's/.+\///'`
 OUTPUT_HTML_FILE=${TMP_DIR}/${HTML_FILE_NAME}
-wget -q $URL -O ${OUTPUT_HTML_FILE}
+wget "${WGET_OPT}" -q ${URL} -O ${OUTPUT_HTML_FILE}
 
 # The HTML file downloaded contains a java script file which
 # contains the config for the flash media player.
-JS_URL=`cat ${OUTPUT_HTML_FILE} | grep ".js" | grep config | sed -re s/^.+config=// | sed -re 's/(.+)js.+/\1/'`
-JS_URL=${JS_URL}js
+JS_URL=`cat ${OUTPUT_HTML_FILE} | grep "param name=\"flashvars\"" | grep "config=" | sed -e s/^.*config=// | sed -e 's/js[^-]*$//'`;
+JS_URL="${JS_URL}js";
 rm ${OUTPUT_HTML_FILE}
 
 # Download the javascript file for parsing.
 JS_FILE=`echo ${JS_URL} | sed -re 's/.+\///'`
 OUTPUT_JS_FILE=${TMP_DIR}/${JS_FILE}
-wget -q ${JS_URL} -O ${OUTPUT_JS_FILE}
+wget "${WGET_OPT}" -q ${JS_URL} -O ${OUTPUT_JS_FILE}
 
 # I suck at regexp, so I'm just going to go through the file
 # until I find the correct mp4 URI.
@@ -48,7 +49,8 @@ while [ ${CAN_EXIT} -eq 0 ]; do
 done
 
 CONTENT_URL=${CONTENT_URL}mp4
+echo ${CONTENT_URL}
 rm ${OUTPUT_JS_FILE}
 
 # Download the mp4 file and save it in a sortable file name.
-wget ${CONTENT_URL} -O zp_${HTML_FILE_NAME}.mp4
+wget "${WGET_OPT}" ${CONTENT_URL} -O zp_${HTML_FILE_NAME}.mp4
