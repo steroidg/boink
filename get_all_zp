@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# This script used to download all the zero punctuation that I didn't have.
+# But now since I have all but the latest one. It's just dowlading the new
+# episodes that I don't already have from ZP's first page.
+#
+# This script requires get_zp_content_from_url in the PATH
+
+PAGE_FIRST=1;
+PAGE_MAX=1;
+BASE_URL="http://www.escapistmagazine.com/videos/view/zero-punctuation?page=";
+TMP_FILE="./tmp_zp_download";
+INTERVAL=120; # Interval between downloads, in seconds.
+
+i=${PAGE_FIRST};
+while [ ${i} -le ${PAGE_MAX} ]; do
+	wget ${BASE_URL}${i} -q -O ${TMP_FILE};
+
+	if [ -f ${TMP_FILE} ]; then
+		a=1;
+		b=500;
+		while [ ${a} -lt ${b} ]; do
+			ZP_URL=`cat ${TMP_FILE} | grep video_banner | cut -d "=" -f $a | grep zero-punctuation | grep -v "?page"| cut -d "'" -f 2`;
+			[ -n "${ZP_URL}" ] && get_zp_content_from_url ${ZP_URL};
+			sleep ${INTERVAL};
+			a=`expr $a + 1`;
+		done
+	fi
+
+	i=`expr $i + 1`;
+	rm ${TMP_FILE};
+done
