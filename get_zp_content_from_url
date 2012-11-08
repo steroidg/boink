@@ -22,6 +22,12 @@ WGET_OPT="-U \"Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.6; en-US; rv:1.9.2.1
 # Download the html file for parsing.
 TMP_DIR=/tmp;
 HTML_FILE_NAME=`echo ${URL} | sed -re 's/.+\///'`;
+OUTPUT_MP4_FILE=zp_${HTML_FILE_NAME}.mp4;
+if [ -f ${OUTPUT_MP4_FILE} ]; then
+	echo "${OUTPUT_MP4_FILE} already exists, not downloading again.";
+	exit 0;
+fi
+
 OUTPUT_HTML_FILE=${TMP_DIR}/${HTML_FILE_NAME};
 wget "${WGET_OPT}" -q ${URL} -O ${OUTPUT_HTML_FILE};
 if [ $? -ne 0 ]; then
@@ -58,10 +64,11 @@ while [ ${CAN_EXIT} -eq 0 ]; do
 done
 
 CONTENT_URL=${CONTENT_URL}mp4
+echo $CONTENT_URL
 rm ${OUTPUT_JS_FILE}
 
 # Download the mp4 file and save it in a sortable file name.
-wget "${WGET_OPT}" -q ${CONTENT_URL} -O zp_${HTML_FILE_NAME}.mp4
+wget "${WGET_OPT}" ${CONTENT_URL} -O ${OUTPUT_MP4_FILE}
 if [ $? -ne 0 ]; then
 	echo "ERROR: Failed to download ${CONTENT_URL}.\n";
 	exit 1;
