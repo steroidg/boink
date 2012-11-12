@@ -1,0 +1,16 @@
+#!/bin/bash
+
+INTERFACE=$1;
+PROGNAME=`basename $0`;
+
+if [ -z "${INTERFACE}" ]; then
+	echo "Usage ${PROGNAME} <nic>";
+	exit 1;
+fi
+
+while true; do
+	clear;
+	echo -e "Scanning channels at 1 second interval, press Ctrl-C to stop\n";
+	iwlist ${INTERFACE} scan | grep Channel | grep -v Frequency | sort | uniq -c
+	sleep 1;
+done
