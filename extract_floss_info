@@ -1,0 +1,36 @@
+#!/bin/bash
+
+process_string () {
+	STR=${1};
+	ID=`echo ${STR} | awk -F 'class="FN">' '{print $2}' | awk -F '<' '{print $1}'`;
+	DESC=`echo ${STR} | awk -F 'class="FN">' '{print $3}' | awk -F '<' '{print $1}'`;
+	RGB=`echo ${STR} | awk -F 'background-color:' '{print $2}' | awk -F ';' '{print $1}' | sed -e s/^#//`;
+	OUTPUT_STR="INSERT INTO \`cs_string\` VALUES ('${ID}', ${SYS_NUM}, '${DESC}', '${RGB}');";
+	echo ${OUTPUT_STR} >> ${SQL_FILE};
+}
+
+
+
+if [ $# -ne 2 ]; then
+	echo "Usage: `basename $0` html_file sys_num";
+	exit 1;
+fi
+
+INPUT_HTML=$1;
+SYS_NUM=$2;
+
+
+SQL_FILE="`echo ${INPUT_HTML} | sed s/html//`sql";
+
+[ -f ${SQL_FILE} ] && rm ${SQL_FILE};
+
+IFS=$'\n';
+for i in `cat ${INPUT_HTML} | grep "<input size=\"2\""`; do
+	HTML_STR=`echo ${i} | awk -F 'input' '{print $2}'`; 
+	[ -n "${HTML_STR}" ] && process_string "${HTML_STR}";
+	HTML_STR=`echo ${i} | awk -F 'input' '{print $3}'`; 
+	[ -n "${HTML_STR}" ] && process_string "${HTML_STR}";
+	HTML_STR=`echo ${i} | awk -F 'input' '{print $4}'`; 
+	[ -n "${HTML_STR}" ] && process_string "${HTML_STR}";
+done
+unset IFS;
