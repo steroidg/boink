@@ -37,4 +37,4 @@ done
 RDP_WIDTH=`expr ${CONF_WIDTH} - 4`
 RDP_HEIGHT=`expr ${CONF_HEIGHT} - 80`
 
-/usr/bin/rdesktop -K -g ${RDP_WIDTH}x${RDP_HEIGHT} ${RDP_SERVER}
+/usr/bin/rdesktop -r clipboard:PRIMARYCLIPBOARD -K -g ${RDP_WIDTH}x${RDP_HEIGHT} ${RDP_SERVER}
