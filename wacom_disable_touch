@@ -1,0 +1,7 @@
+#!/bin/bash
+
+WACOM_TOUCH_ID=`xsetwacom --list devices | grep TOUCH | awk -F 'id:' '{print $2}' | awk '{print $1}'`;
+
+if [ -n "${WACOM_TOUCH_ID}" ]; then
+	xsetwacom set ${WACOM_TOUCH_ID} touch off;
+fi
