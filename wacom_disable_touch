@@ -1,7 +1,16 @@
 #!/bin/bash
 
 WACOM_TOUCH_ID=`xsetwacom --list devices | grep TOUCH | awk -F 'id:' '{print $2}' | awk '{print $1}'`;
+WACOM_PAD_ID=`xsetwacom --list devices | grep PAD | awk -F 'id:' '{print $2}' | awk '{print $1}'`;
 
 if [ -n "${WACOM_TOUCH_ID}" ]; then
-	xsetwacom set ${WACOM_TOUCH_ID} touch off;
+	xsetwacom set ${WACOM_TOUCH_ID} gesture off;
+fi
+
+
+if [ -n "${WACOM_PAD_ID}" ]; then
+	xsetwacom set ${WACOM_PAD_ID} Button 3 "key CTRL z";
+	xsetwacom set ${WACOM_PAD_ID} Button 8 "key SHIFT =";
+	xsetwacom set ${WACOM_PAD_ID} Button 9 "key -";
+	xsetwacom set ${WACOM_PAD_ID} Button 1 "key CTRL y";
 fi
