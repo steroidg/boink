@@ -13,6 +13,8 @@ REGISTRY_FILE=$2;
 
 [ -f ${REGISTRY_FILE} ] && truncate -s 0 ${REGISTRY_FILE};
 
+IFS=$'\n';
 for i in `find ${DIR_NAME}`; do
-    [ -f $i ] && md5sum $i >> ${REGISTRY_FILE};
+    [ -f "${i}" ] && md5sum "${i}" >> ${REGISTRY_FILE};
 done
+unset IFS;
