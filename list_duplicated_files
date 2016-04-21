@@ -1,0 +1,39 @@
+#!/bin/bash
+
+PROG_NAME=`basename $0`;
+
+if [ $# -ne 3 ]; then
+    echo "ERROR: Incorrect number of arguments";
+    echo "Usage: ${PROG_NAME} register_file_1 registry_file_2 dup_list";
+    exit 1;
+fi
+
+SAME_REGISTRY='false';
+N_LINES=0;
+REGISTRY_FILE_1=$1;
+REGISTRY_FILE_2=$2;
+DUP_LIST=$3;
+
+if [ "${REGISTRY_FILE_1}" == "${REGISTRY_FILE_2}" ]; then
+    SAME_REGISTRY='true';
+    N_LINES=1;
+fi
+
+[ -f ${DUP_LIST} ] && truncate -s 0 ${DUP_LIST};
+
+IFS=$'\n';
+for i in `cat ${REGISTRY_FILE_1}`; do
+    MD5=`echo $i | awk '{print $1}';
+    FN=`echo $i | awk '{print $2}';
+    DUP_LINE=`cat ${REGISTRY_FILE_2} | grep ^${MD5}`
+    DUP_FOUND=`echo "${DUP_LINE}" | wc -l`;
+    if [ ${DUP_FOUND} -gt ${N_LINES} ]; then
+        if [ "${SAME_REGISTRY}" != 'true' ]; then
+            echo "${i}" >> ${DUP_LIST};
+        fi
+        echo "${DUP_LINE}" >> ${DUP_LIST};
+    fi
+done
+unset IFS;
+
+exit 0;
