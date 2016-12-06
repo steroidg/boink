@@ -5,6 +5,7 @@ WACOM_PAD_ID=`xsetwacom --list devices | grep PAD | awk -F 'id:' '{print $2}' | 
 
 if [ -n "${WACOM_TOUCH_ID}" ]; then
 	xsetwacom set ${WACOM_TOUCH_ID} gesture off;
+	xsetwacom set ${WACOM_TOUCH_ID} touch off;
 fi
 
 
