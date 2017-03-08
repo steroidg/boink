@@ -1,4 +1,4 @@
 #!/bin/bash
 
 DEVICE_ID=`xinput list | grep 'ImPS/2 Generic Wheel Mouse' | awk -F'id=' '{print $2}' | awk '{print $1}'`;
-xinput set-prop "${DEVICE_ID}" "Evdev Middle Button Emulation" 1
+[ -n "${DEVICE_ID}" ] && xinput set-prop "${DEVICE_ID}" "Evdev Middle Button Emulation" 1
