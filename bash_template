@@ -1,0 +1,33 @@
+#!/bin/bash
+
+
+print_usage () {
+    echo "Usage: ${G_PROGNAME} <option> arg";
+    echo "    arg: arg description";
+    return 0;
+}
+
+
+# main () {
+    G_DEBUG_MODE='OFF';
+    readonly G_PROGNAME=`basename $0`;
+    
+    while getopts vh opts; do
+        case ${opts} in
+            h) print_usage;
+               exit 0;;
+            v) readonly G_DEBUG_MODE='ON';
+               ;;
+            *) print_usage;
+               exit 0;;
+        esac
+    done
+    shift `expr ${OPTIND} - 1`
+
+    if [ $# -ne 1 ]; then
+        print_usage;
+        exit 1;
+    fi
+
+    exit 0;
+# } main ()
