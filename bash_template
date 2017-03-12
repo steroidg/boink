@@ -12,17 +12,19 @@ print_usage () {
     G_DEBUG_MODE='OFF';
     readonly G_PROGNAME=`basename $0`;
     
-    while getopts vh opts; do
+    while getopts dh opts; do
         case ${opts} in
+            d) readonly G_DEBUG_MODE='ON';
+               ;;
             h) print_usage;
                exit 0;;
-            v) readonly G_DEBUG_MODE='ON';
-               ;;
             *) print_usage;
                exit 0;;
         esac
     done
     shift `expr ${OPTIND} - 1`
+
+    readonly G_DEBUG_MODE;
 
     if [ $# -ne 1 ]; then
         print_usage;
