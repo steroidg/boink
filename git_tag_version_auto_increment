@@ -1,0 +1,88 @@
+#!/bin/bash
+
+
+print_usage () {
+    echo "Usage: ${G_PROGNAME} <option>";
+    echo "";
+    echo "  Options:";
+    echo "    -l: Incremental level. Valid entries:"
+    echo "        major minor patch prerelease";
+    echo "    -p: Prefix string that comes before version number"
+    echo "        i.e 'v' for v1.0.0";
+    echo "    -d: Debug mode.";
+    echo "    -h: Print out this message.";
+    return 0;
+}
+
+
+# main () {
+    G_DEBUG_MODE='OFF';
+    readonly G_PROGNAME=`basename $0`;
+    G_PREFIX='';
+    G_LEVEL='patch';
+    
+    while getopts dhp:l: opts; do
+        case ${opts} in
+            l) G_LEVEL=${OPTARG};
+               ;;
+            p) G_PREFIX=${OPTARG};
+               ;;
+            d) readonly G_DEBUG_MODE='ON';
+               ;;
+            h) print_usage;
+               exit 0;;
+            *) print_usage;
+               exit 0;;
+        esac
+    done
+    shift `expr ${OPTIND} - 1`
+
+    readonly G_DEBUG_MODE;
+    readonly G_PREFIX;
+    readonly G_LEVEL;
+
+    case ${G_LEVEL} in
+        major);;
+        minor);;
+        patch);;
+        prerelease);;
+        *) echo "ERROR: Invalid increment level: ${G_LEVEL}.";
+           print_usage;
+           exit 1;;
+    esac
+
+    if [ $# -ne 0 ]; then
+        echo "ERROR: Wrong number of arguments.";
+        print_usage;
+        exit 1;
+    fi
+
+    readonly G_LATEST_VER="`git tag -l |\
+                            grep ^${G_PREFIX} |\
+                            sort -V |\
+                            tail -n 1|\
+                            sed s^${G_PREFIX}g`";
+
+    if [ "${G_DEBUG_MODE}" = 'ON' ]; then
+        echo "DEBUG: G_LATEST_VER = ${G_LATEST_VER}";
+    fi
+
+    readonly G_INC_VER="`semver -i ${G_LEVEL} ${G_LATEST_VER}`";
+
+    if [ "${G_DEBUG_MODE}" = 'ON' ]; then
+        echo "DEBUG: G_INC_VER = ${G_INC_VER}";
+    fi
+
+    echo "I'm about to issue the following 2 commands:";
+    echo "  git tag -a ${G_PREFIX}${G_INC_VER} -m \"${G_PREFIX}${G_INC_VER}\" incremental release"
+    echo "  git push origin --tags";
+    echo "";
+    echo "Are you sure you want me to do so? (Y/N)";
+    read ANSWER;
+    if [ "${ANSWER}" = 'y' -o "${ANSWER}" = 'Y' ]; then
+        git tag -a ${G_PREFIX}${G_INC_VER} -m "${G_PREFIX}${G_INC_VER}" incremental release;
+        git push origin --tags;
+    fi
+
+    exit 0;
+# } main ()
