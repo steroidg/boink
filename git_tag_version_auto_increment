@@ -67,21 +67,35 @@ print_usage () {
         echo "DEBUG: G_LATEST_VER = ${G_LATEST_VER}";
     fi
 
+    if [ -z "${G_PREFIX}" ]; then
+        readonly G_VER_TEST=`echo ${G_LATEST_VER} | sed -e s/[^0-9.]*//g`;
+        if [ "${G_LATEST_VER}" != "${G_VER_TEST}" ]; then
+            echo "ERROR: No version found.";
+            exit 1;
+        fi
+    fi
     readonly G_INC_VER="`semver -i ${G_LEVEL} ${G_LATEST_VER}`";
 
     if [ "${G_DEBUG_MODE}" = 'ON' ]; then
         echo "DEBUG: G_INC_VER = ${G_INC_VER}";
     fi
 
+    if [ -z "${G_INC_VER}" ]; then
+        echo "ERROR: Unable to generate a new version number.";
+        exit 1;
+    fi
+
+    readonly GIT_TAG_CMD="git tag -a ${G_PREFIX}${G_INC_VER} -m \"${G_PREFIX}${G_INC_VER} incremental release\"";
+    readonly GIT_PUSH_CMD="git push origin --tags";
     echo "I'm about to issue the following 2 commands:";
-    echo "  git tag -a ${G_PREFIX}${G_INC_VER} -m \"${G_PREFIX}${G_INC_VER}\" incremental release"
-    echo "  git push origin --tags";
+    echo "  ${GIT_TAG_CMD}"
+    echo "  ${GIT_PUSH_CMD}";
     echo "";
     echo "Are you sure you want me to do so? (Y/N)";
     read ANSWER;
     if [ "${ANSWER}" = 'y' -o "${ANSWER}" = 'Y' ]; then
-        git tag -a ${G_PREFIX}${G_INC_VER} -m "${G_PREFIX}${G_INC_VER}" incremental release;
-        git push origin --tags;
+        ${GIT_TAG_CMD}
+        #${GIT_PUSH_CMD};
     fi
 
     exit 0;
