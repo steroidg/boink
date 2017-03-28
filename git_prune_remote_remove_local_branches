@@ -3,8 +3,28 @@
 git fetch
 
 if [ $? -ne 0 ]; then
-    echo "ERROR: Unable to git fetch".
-    exit 1;
+  echo "ERROR: Unable to git fetch".
+  exit 1;
 fi
+
+git remote prune origin
+
+if [ $? -ne 0 ]; then
+  echo "ERROR: Unable to prune remote".
+  exit 1;
+fi
+
+readonly LOCAL_BRANCHES=`git branch | cut -c 3-`;
+
+for i in ${LOCAL_BRANCHES}; do
+  REMOTE_CHECK=`git branch -r | cut -d '/' -f 2 | grep -v HEAD | grep ${i}`;
+  if [ -z "${REMOTE_CHECK}" ]; then
+    echo "Branch: ${i} is not available remote, remove locally? (Y/N)";
+    read ANSWER;
+    if [ "${ANSWER}" = 'y' -o "${ANSWER}" = 'Y' ]; then
+      git branch -D ${i};
+    fi
+  fi
+done
 
 exit 0;
