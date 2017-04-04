@@ -94,8 +94,8 @@ print_usage () {
     echo "Are you sure you want me to do so? (Y/N)";
     read ANSWER;
     if [ "${ANSWER}" = 'y' -o "${ANSWER}" = 'Y' ]; then
-        ${GIT_TAG_CMD}
-        #${GIT_PUSH_CMD};
+        eval ${GIT_TAG_CMD}
+        ${GIT_PUSH_CMD};
     fi
 
     exit 0;
