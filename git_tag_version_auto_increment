@@ -86,7 +86,7 @@ print_usage () {
     fi
 
     readonly GIT_TAG_CMD="git tag -a ${G_PREFIX}${G_INC_VER} -m \"${G_PREFIX}${G_INC_VER} incremental release\"";
-    readonly GIT_PUSH_CMD="git push origin --tags";
+    readonly GIT_PUSH_CMD="git push origin ${G_PREFIX}${G_INC_VER}";
     echo "I'm about to issue the following 2 commands:";
     echo "  ${GIT_TAG_CMD}"
     echo "  ${GIT_PUSH_CMD}";
