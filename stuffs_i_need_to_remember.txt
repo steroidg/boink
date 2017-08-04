@@ -36,149 +36,173 @@ Shell tricks:
   - PID of last command echo $!.
   - PID of current command echo $$.
 
+
 Ubuntu tricks:
-    - Don't name files with dot (.) in /etc/cron.d on Ubuntu.
-    - On Ubuntu, rescan-scsi-bus.sh is in the scsitools package
-    - LVM+XFS packages on Ubuntu: lvm2 xfsprogs
-    - chmod only for dirs: find -type d -print0 | xargs -0 chmod <chmod_arg>
-    - Find files and execute command: find <dir> -type f -exec <cmd> {} \;
-    - Get all preseed options: debconf-get-selections --installer
-    - chattr +i <file> makes it immutable
-    - Emulate middle click: xinput set-prop "12" "Evdev Middle Button Emulation" 1
-    - Enabling vim-puppet after installing: vim-addons -w install puppet
-    - Mount initrd images: mount -o loop -t sysfs <initrd_img>
+  - Don't name files with dot (.) in /etc/cron.d on Ubuntu.
+  - On Ubuntu, rescan-scsi-bus.sh is in the scsitools package
+  - LVM+XFS packages on Ubuntu: lvm2 xfsprogs
+  - chmod only for dirs: find -type d -print0 | xargs -0 chmod <chmod_arg>
+  - Find files and execute command: find <dir> -type f -exec <cmd> {} \;
+  - Get all preseed options: debconf-get-selections --installer
+  - chattr +i <file> makes it immutable
+  - Emulate middle click: xinput set-prop "12" "Evdev Middle Button Emulation" 1
+  - Enabling vim-puppet after installing: vim-addons -w install puppet
+  - Mount initrd images: mount -o loop -t sysfs <initrd_img>
+
 
 Solaris 10 Network Aggregate bug fix:
-    - ifconfig -a  first to see its settings then
-    - ifconfig aggr1 unplumb
-    - ifconfig aggr1 plumb inet <IP>/<Netmask>
-    - ifconfig aggr1 up
+  - ifconfig -a  first to see its settings then
+  - ifconfig aggr1 unplumb
+  - ifconfig aggr1 plumb inet <IP>/<Netmask>
+  - ifconfig aggr1 up
+
 
 Solaris 10 tricks:
-    - svcs to list all running services
-    - svcs -d <service_name> to check service dependencies
-    - check /var/svc/log/<service_name> to check for errors
-    - svcadm restart <service_name> to restart service
-    - svcadm clear <service_name> to restore service from maintenance mode
-    - snoop ypserv (nis) traffic: snoop rpc 100004 -o <file_name>
-    - Read output of snoop: snoop -i <file_name>
-    - psrinfo -pv <-- print out CPU configuration
-    - prtdiag | grep "Memory size" <-- print out Memory information
-    - Link aggregation command: dladm
-    - Show link aggregation: dladm --show-link
+  - svcs to list all running services
+  - svcs -d <service_name> to check service dependencies
+  - check /var/svc/log/<service_name> to check for errors
+  - svcadm restart <service_name> to restart service
+  - svcadm clear <service_name> to restore service from maintenance mode
+  - snoop ypserv (nis) traffic: snoop rpc 100004 -o <file_name>
+  - Read output of snoop: snoop -i <file_name>
+  - psrinfo -pv <-- print out CPU configuration
+  - prtdiag | grep "Memory size" <-- print out Memory information
+  - Link aggregation command: dladm
+  - Show link aggregation: dladm --show-link
+
 
 ZFS commands:
-    - zfs set/get sharenfs <zfs_volumn> to get/set nfs sharing permmission
-    - zpool status <zpool> to get disk information
+  - zfs set/get sharenfs <zfs_volumn> to get/set nfs sharing permmission
+  - zpool status <zpool> to get disk information
+
 
 ILOM commands:
-    - start /SYS <-- Starts the system
-    - stop /SYS <-- Stops the system
-    - reset /SYS <-- Restarts the system (won't start if stopped)
-    - start /SP/console | console | console -f <-- Access serial console
-    - #. | ESC ( <-- Exit serial console
-    - Default ILOM pw: changeme
+  - start /SYS <-- Starts the system
+  - stop /SYS <-- Stops the system
+  - reset /SYS <-- Restarts the system (won't start if stopped)
+  - start /SP/console | console | console -f <-- Access serial console
+  - #. | ESC ( <-- Exit serial console
+  - Default ILOM pw: changeme
+
 
 ALOM commands:
-    - reset <-- Restarts the system
-    - console <-- login to the console
-    - #. <-- Exit serial console
+  - reset <-- Restarts the system
+  - console <-- login to the console
+  - #. <-- Exit serial console
+
 
 Zone commands:
-    - zlogin -C <zone_name> <-- login to a zone
-    - zoneadm list -cv <-- list all zones
-    - zoneadm -z <zone_name> shutdown
-    - zonecfg -z <zone_name> info <-- prints config information about a zone
-    - Exit zlogin type ~. (tilda dot)
+  - zlogin -C <zone_name> <-- login to a zone
+  - zoneadm list -cv <-- list all zones
+  - zoneadm -z <zone_name> shutdown
+  - zonecfg -z <zone_name> info <-- prints config information about a zone
+  - Exit zlogin type ~. (tilda dot)
+
 
 LVM commands:
-    - vgdisplay <-- List all volumn group
-    - lvdisplay -a <-- List all logical volumns
-    - To create a maxed out LV: lvcreate -n <lv_name> -l 100%FREE <vg_name>
+  - vgdisplay <-- List all volumn group
+  - lvdisplay -a <-- List all logical volumns
+  - To create a maxed out LV: lvcreate -n <lv_name> -l 100%FREE <vg_name>
+
 
 FS commands:
-    - xfs_admin -u <device> <-- List UUID of given XFS filesystem
-    - blkid <device> <-- List UUID of given EXT(?) filesystem
-    - iostat -d N <-- Check disk io every N seconds
+  - xfs_admin -u <device> <-- List UUID of given XFS filesystem
+  - blkid <device> <-- List UUID of given EXT(?) filesystem
+  - iostat -d N <-- Check disk io every N seconds
+
 
 Apache tricks:
-    - If apache doesn't recognize a new host name, restart nscd.
+  - If apache doesn't recognize a new host name, restart nscd.
+
 
 ssh tricks:
-    - Force ssh to use password: ssh -o PubkeyAuthentication=no user@machine
-    - ssh without checking hostkey: ssh -o StrictHostKeyChecking=no user@machine
-    - Prevent password prompt: ssh -o BatchMode=yes user@machine
-    - Generate a ssh key: ssh-keygen -t rsa -b 4096
-    - Run ssh command at backgroud: ssh <user>@<host> 'nohup <prog_name> > foo.out 2> foo.err < /dev/null &'
-    - Reset ssh passphrase: ssh-keygen -f id_rsa -p
-    - Regenerate pub key: ssh-keygen -y -f ~/.ssh/id_rsa > ~/.ssh/id_rsa.pub
-    - Convert a ssh pub key to correct format: ssh-keygen -i -f <pub_key>
+  - Force ssh to use password: ssh -o PubkeyAuthentication=no user@machine
+  - ssh without checking hostkey: ssh -o StrictHostKeyChecking=no user@machine
+  - Prevent password prompt: ssh -o BatchMode=yes user@machine
+  - Generate a ssh key: ssh-keygen -t rsa -b 4096
+  - Run ssh command at backgroud: ssh <user>@<host> 'nohup <prog_name> > foo.out 2> foo.err < /dev/null &'
+  - Reset ssh passphrase: ssh-keygen -f id_rsa -p
+  - Regenerate pub key: ssh-keygen -y -f ~/.ssh/id_rsa > ~/.ssh/id_rsa.pub
+  - Convert a ssh pub key to correct format: ssh-keygen -i -f <pub_key>
+
 
 General linux:
-    - To save within the less command: s file_name.
-    - Blowfish shadow needs pam_unix2.so. Add it in /etc/pam.d/common-auth.
-    - Add key to apt repo: apt-key adv --keyserver keyserver.ubuntu.com --recv-keys <key>
-    - X11 forwarding in sudo: COOKIE=`xauth list`; sudo -E xauth add ${COOKIE}; sudo -E su
-    - Mount vfat with Chinese charaters: mount -t vfat -o iocharset=utf8 <device> <mount_point>
-    - To rescan SCSI bus for 7+ devices: "rescan-scsi-bus.sh -w".
-    - To rescan all SCSI for i in /sys/class/scsi_host/host*; do [ -d $i ] && echo "- - -" > $i/scan; done .
-    - To detech SCSC disk size change: echo 1 > /sys/class/scsi_device/0\:0\:1\:0/device/rescan
-    - Find out which scsi device is which disk: ls -ld /sys/block/sd*/device
-    - List all installed packages in RPM repository: rpm -qa
-    - Rename screen session: Ctrl-a :sessionname <session_name>
-    - RPC service list: /etc/rpc
-    - Disable Wacom tablet touch "xsetwacom --set "Wacom Bamboo 2FG 6x8 Finger touch" touch off".
-    - Securely wipe drive use: shred
-    - If uuid don't apper after creating a new fs, run: udevadm trigger.
-    - If file system is being filled for no apparent reason. Run: "lsof" to see which files are open.
-    - Convert video file to mp3: /usr/bin/avconv -i <input_video_file> -y -v 0 -strict experimental -ab 256k -f mp3 <output_mp3_file>
-    - grc can colour command outputs: grc cat /var/log/syslog
-    - ntpq -p will show the status of ntpd.
-    - To apply sysctl.conf setting: sysctl -w <item>=<value>.
-    - Change upper to lower case, pipe to: tr '[:upper:]' '[:lower:]'.
-    - Create multiple directories: mkdir {dir1,dir2,dir3}
-    - Join server to AD: net ads join -U <uname> computername=<OU/host_name>
-    - wget with IPv6 IP, put IP between []. I.e.: wget http://[IPv6_IP].
+  - To save within the less command: s file_name.
+  - Blowfish shadow needs pam_unix2.so. Add it in /etc/pam.d/common-auth.
+  - Add key to apt repo: apt-key adv --keyserver keyserver.ubuntu.com --recv-keys <key>
+  - X11 forwarding in sudo: COOKIE=`xauth list`; sudo -E xauth add ${COOKIE}; sudo -E su
+  - Mount vfat with Chinese charaters: mount -t vfat -o iocharset=utf8 <device> <mount_point>
+  - To rescan SCSI bus for 7+ devices: "rescan-scsi-bus.sh -w".
+  - To rescan all SCSI for i in /sys/class/scsi_host/host*; do [ -d $i ] && echo "- - -" > $i/scan; done .
+  - To detech SCSC disk size change: echo 1 > /sys/class/scsi_device/0\:0\:1\:0/device/rescan
+  - Find out which scsi device is which disk: ls -ld /sys/block/sd*/device
+  - List all installed packages in RPM repository: rpm -qa
+  - Rename screen session: Ctrl-a :sessionname <session_name>
+  - RPC service list: /etc/rpc
+  - Disable Wacom tablet touch "xsetwacom --set "Wacom Bamboo 2FG 6x8 Finger touch" touch off".
+  - Securely wipe drive use: shred
+  - If uuid don't apper after creating a new fs, run: udevadm trigger.
+  - If file system is being filled for no apparent reason. Run: "lsof" to see which files are open.
+  - Convert video file to mp3: /usr/bin/avconv -i <input_video_file> -y -v 0 -strict experimental -ab 256k -f mp3 <output_mp3_file>
+  - grc can colour command outputs: grc cat /var/log/syslog
+  - ntpq -p will show the status of ntpd.
+  - To apply sysctl.conf setting: sysctl -w <item>=<value>.
+  - Change upper to lower case, pipe to: tr '[:upper:]' '[:lower:]'.
+  - Create multiple directories: mkdir {dir1,dir2,dir3}
+  - Join server to AD: net ads join -U <uname> computername=<OU/host_name>
+  - wget with IPv6 IP, put IP between []. I.e.: wget http://[IPv6_IP].
+
 
 Misc:
-    - Server Ops costcode 8278
-    - Training costcode 8202
-    - Start all rtorrent tasks: Ctrl-X then d.multicall=,d.start= 
-    - Stop all rtorrent tasks: Ctrl-X then d.multicall=,d.stop= 
+  - Server Ops costcode 8278
+  - Training costcode 8202
+  - Start all rtorrent tasks: Ctrl-X then d.multicall=,d.start= 
+  - Stop all rtorrent tasks: Ctrl-X then d.multicall=,d.stop= 
+
 
 Windowz:
-    - Runas that works for Active directory shits: runas /user:<DOMAIN>\<user_name> "cmd /c Start /B dsac.exe"
-    - Restart VBoxTray.exe: C:\Windows\system32\VBoxTray.exe
-    - Windows startup stuffs: msconfig.exe
-    - You can pipe output in cmd line to clipboard: <command> | clip
+  - Runas that works for Active directory shits: runas /user:<DOMAIN>\<user_name> "cmd /c Start /B dsac.exe"
+  - Restart VBoxTray.exe: C:\Windows\system32\VBoxTray.exe
+  - Windows startup stuffs: msconfig.exe
+  - You can pipe output in cmd line to clipboard: <command> | clip
+
 
 DRAC:
-    - DRAC default uname: root
-    - DRAC default passwd: calvin
-    - Find out the DRAC IP from command line: racadm getniccfg
+  - DRAC default uname: root
+  - DRAC default passwd: calvin
+  - Find out the DRAC IP from command line: racadm getniccfg
 
 
 Puppet trick:
-    - Set ca_ttl = 20y in [master] section to extend the ttl of puppet ca.
-    - 'puppet doc -r type' to generate all puppet documentation.
+  - Set ca_ttl = 20y in [master] section to extend the ttl of puppet ca.
+  - Deprecated: 'puppet doc -r type' to generate all puppet documentation.
+
 
 SuSE trick:
-    - zypper search -s <pkg_name> will return packages with version number.
+  - zypper search -s <pkg_name> will return packages with version number.
+
 
 Git trick:
-    - git checkout -t -b <branch_name> will create new branch and track branch where it's based on.
-    - git push -u origin <branch_name> will push branch to remote and track it.
-    - Specify ssh key for git operation: 'ssh-agent bash -c 'ssh-add <priv_key>; git <command>'
-    - Undo last commit: git reset HEAD~
-    - Remove all stale remote branches: git remote prune origin 
-    - Remove tag at remote: git tag -d <tag_name> && git push origin :refs/tags/<tag_name>
-    - Add tag: git tag -a <tag> -m "<message>"
-    - Push tag to remote: git push origin --tags
-    - Reset local branch to remote: git reset --hard origin/<branch_name>
-    - Autoyast.xml in /root/autoyast.xml
-    - Remove remote branch: git push origin --delete <branch_name>
-    - Remove local branch: git branch -d <branch_name>
-    - Revert commit: git revert <commit_ref>
+  - git checkout -t -b <branch_name> will create new branch and track branch where it's based on.
+  - git push -u origin <branch_name> will push branch to remote and track it.
+  - Specify ssh key for git operation: 'ssh-agent bash -c 'ssh-add <priv_key>; git <command>'
+  - Undo last commit: git reset HEAD~
+  - Remove all stale remote branches: git remote prune origin 
+  - Remove tag at remote: git tag -d <tag_name> && git push origin :refs/tags/<tag_name>
+  - Add tag: git tag -a <tag> -m "<message>"
+  - Push tag to remote: git push origin --tags
+  - Reset local branch to remote: git reset --hard origin/<branch_name>
+  - Autoyast.xml in /root/autoyast.xml
+  - Remove remote branch: git push origin --delete <branch_name>
+  - Remove local branch: git branch -d <branch_name>
+  - Revert commit: git revert <commit_ref>
+  - Search through all branches: git grep <regex> $(git branch -a | grep -v HEAD | grep -v '*') <file_name(optional)>
+
 
 Systemd tricks:
-    - List services: systemctl list-unit-files --type=service
+  - List services: systemctl list-unit-files --type=service
+
+
+VM tricks:
+  - List all running VM instances: vmrun list
+  - Suspend running VM instance: vmrun suspend <full_path_to_vmx>
