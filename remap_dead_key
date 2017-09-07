@@ -1,0 +1,4 @@
+#!/bin/bash
+
+xmodmap -e "keycode 192 = 4"
+xmodmap -e "keycode 193 = dollar"

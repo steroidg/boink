@@ -35,6 +35,7 @@ Shell tricks:
   - Find string containing substring: if [[ 'string' == *'substring'* ]]; then foo; fi;
   - PID of last command echo $!.
   - PID of current command echo $$.
+  - Remap keyboard key: xmodmap -e "keycode <keycode_number> = <key_function>"
 
 
 Ubuntu tricks:
@@ -151,6 +152,7 @@ General linux:
   - Create multiple directories: mkdir {dir1,dir2,dir3}
   - Join server to AD: net ads join -U <uname> computername=<OU/host_name>
   - wget with IPv6 IP, put IP between []. I.e.: wget http://[IPv6_IP].
+  - Remove IPv6 address from interface: ip -6 addr del <ipv6address>/<prefixlength> dev <interface>
 
 
 Misc:
@@ -182,7 +184,7 @@ SuSE trick:
   - zypper search -s <pkg_name> will return packages with version number.
 
 
-Git trick:
+Git:
   - git checkout -t -b <branch_name> will create new branch and track branch where it's based on.
   - git push -u origin <branch_name> will push branch to remote and track it.
   - Specify ssh key for git operation: 'ssh-agent bash -c 'ssh-add <priv_key>; git <command>'
@@ -199,7 +201,7 @@ Git trick:
   - Search through all branches: git grep <regex> $(git branch -a | grep -v HEAD | grep -v '*') <file_name(optional)>
 
 
-Systemd tricks:
+Systemd:
   - List services: systemctl list-unit-files --type=service
 
 
