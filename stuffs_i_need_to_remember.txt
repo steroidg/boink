@@ -1,4 +1,4 @@
-Shell tricks:
+Shell:
   - To not have space as delimeter in a for loop use IFS=$'\n'.
   - To use TAB as delimeter for cut do <CTRL-V> TAB.
   - Expr can't do fractions, use bc instead.
@@ -6,14 +6,12 @@ Shell tricks:
   - Remove leading whitespaces: sed -e 's/^[ \t]*//'.
   - Remove ending whitespaces: sed -e 's/[ \t]*$//'.
   - Remove line with sed: sed '/PATTERN/d'.
+  - Remove multiple lines: sed -e '/<pattern>/,+<n_lines>d' <file_name>
+  - Remove 2 lines excluding match: sed -e '/<pattern>/{n;N;d}' <file_name>
   - Remove first word of line: sed -e 's/^\w*\ *//'.
   - In place replace with sed: sed -i s/<foo>/<bar> <file>.
   - Replace multiple spaces with 1: sed 's/  */ /g'
   - Remove leading N characters: cut -c N-.
-  - Print Nth argument: awk -F<delimiter> '{print $N}'.
-  - Print last argument: awk -F<delimiter> '{print $(NF)}'
-  - Print value between brackets: awk -F '[()]' '{print $2}'
-  - Print value between square brackets: awk -F '[][]' '{print $2}'
   - Print current function name: echo "${FUNCNAME}".
   - Easy way to get date: DATE=`date +%Y%m%d%H%M%S`.
   - Recursive diff that exclude svn dir: diff -ur -x <pattern> <dir> <dir>
@@ -38,7 +36,16 @@ Shell tricks:
   - Remap keyboard key: xmodmap -e "keycode <keycode_number> = <key_function>"
 
 
-Ubuntu tricks:
+Awk:
+  - Print Nth argument: awk -F<delimiter> '{print $N}'.
+  - Print last argument: awk -F<delimiter> '{print $(NF)}'
+  - Print value between brackets: awk -F '[()]' '{print $2}'
+  - Print value between square brackets: awk -F '[][]' '{print $2}'
+  - Print n lines after a str match: awk '$0 == "<match_str>" {i=1;next};i && i++ <= <n_lines>' <file>
+  - Print n lines after a regex match: awk 'match($i, /<regex>/) {i=1;next};i && i++ <= <n_lines>' <file>
+
+
+Ubuntu:
   - Don't name files with dot (.) in /etc/cron.d on Ubuntu.
   - On Ubuntu, rescan-scsi-bus.sh is in the scsitools package
   - LVM+XFS packages on Ubuntu: lvm2 xfsprogs
@@ -49,6 +56,7 @@ Ubuntu tricks:
   - Emulate middle click: xinput set-prop "12" "Evdev Middle Button Emulation" 1
   - Enabling vim-puppet after installing: vim-addons -w install puppet
   - Mount initrd images: mount -o loop -t sysfs <initrd_img>
+  - Change default editor: sudo update-alternatives --config editor
 
 
 Solaris 10 Network Aggregate bug fix:
