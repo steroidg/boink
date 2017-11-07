@@ -38,14 +38,13 @@ set foldlevel=99
 " Enable folding with the spacebar
 nnoremap <space> za
 
+" Highlight extra white spaces
 :highlight ExtraWhitespace ctermbg=red guibg=red
 :match ExtraWhitespace /\s\+$/
 
 " Enable pathogen
 " https://github.com/tpope/vim-pathogen
 execute pathogen#infect()
-syntax on
-filetype plugin indent on
 
 " List of pathogen bundles:
 " https://github.com/scrooloose/nerdtree.git
@@ -54,6 +53,8 @@ filetype plugin indent on
 " https://github.com/tpope/vim-fugitive
 " https://github.com/airblade/vim-gitgutter
 " https://github.com/rodjek/vim-puppet
+" https://github.com/tpope/vim-surround.git
+" https://github.com/tmhedberg/SimpylFold.git
 
 " NERDTree
 " Toggle nerdtree with F10
