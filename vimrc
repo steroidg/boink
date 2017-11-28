@@ -1,3 +1,7 @@
+" Stuffs I better remember:
+" ci<character> - Remove stuffs between charecters and edit
+" yi<character> - Yank between characters
+
 " Shell code folding
 set nocompatible
 filetype plugin indent on
@@ -7,6 +11,7 @@ au FileType sh let g:sh_fold_enabled=5
 au FileType sh let g:is_bash=1
 au FileType sh set foldmethod=syntax
 syntax enable
+set switchbuf=usetab,newtab
 
 " Set default tab spacing
 set expandtab
@@ -26,8 +31,9 @@ nnoremap <M-Up> <C-w><Up>
 nnoremap <M-Down> <C-w><Down>
 nnoremap <M-Left> <C-w><Left>
 nnoremap <M-Right> <C-w><Right>
+nnoremap <C-Right> gt
+nnoremap <C-Left> gT
 
-map <F8> :set number!<CR>
 map <F8> :set number!<CR>
 map <F7> :set paste!<CR>
 
@@ -55,14 +61,14 @@ execute pathogen#infect()
 " https://github.com/rodjek/vim-puppet
 " https://github.com/tpope/vim-surround.git
 " https://github.com/tmhedberg/SimpylFold.git
+" https://github.com/jistr/vim-nerdtree-tabs.git
 
 " NERDTree
 " Toggle nerdtree with F10
 map <F10> :NERDTreeToggle<CR>
 " Current file in nerdtree
 map <F9> :NERDTreeFind<CR>
-
-" Auto start NERDTree (disabled for now)
+" Auto start NERDTree
 " autocmd vimenter * NERDTree
 
 " Enable powerline font for vim-airline
