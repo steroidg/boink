@@ -142,7 +142,7 @@ General linux:
   - X11 forwarding in sudo: COOKIE=`xauth list`; sudo -E xauth add ${COOKIE}; sudo -E su
   - Mount vfat with Chinese charaters: mount -t vfat -o iocharset=utf8 <device> <mount_point>
   - To rescan SCSI bus for 7+ devices: "rescan-scsi-bus.sh -w".
-  - To rescan all SCSI for i in /sys/class/scsi_host/host*; do [ -d $i ] && echo "- - -" > $i/scan; done .
+  - To rescan all SCSI `for i in /sys/class/scsi_host/host*; do [ -d $i ] && echo "- - -" > $i/scan; done` .
   - To detech SCSC disk size change: echo 1 > /sys/class/scsi_device/0\:0\:1\:0/device/rescan
   - Find out which scsi device is which disk: ls -ld /sys/block/sd*/device
   - List all installed packages in RPM repository: rpm -qa
@@ -166,8 +166,8 @@ General linux:
 Misc:
   - Server Ops costcode 8278
   - Training costcode 8202
-  - Start all rtorrent tasks: Ctrl-X then d.multicall=,d.start= 
-  - Stop all rtorrent tasks: Ctrl-X then d.multicall=,d.stop= 
+  - Start all rtorrent tasks: Ctrl-X then d.multicall=,d.start=
+  - Stop all rtorrent tasks: Ctrl-X then d.multicall=,d.stop=
 
 
 Windowz:
@@ -185,6 +185,7 @@ DRAC:
 
 Puppet trick:
   - Set ca_ttl = 20y in [master] section to extend the ttl of puppet ca.
+  - 'puppet node deactivate <nodename>' to get rid of everything in puppetdb.
   - Deprecated: 'puppet doc -r type' to generate all puppet documentation.
 
 
@@ -197,7 +198,7 @@ Git:
   - git push -u origin <branch_name> will push branch to remote and track it.
   - Specify ssh key for git operation: 'ssh-agent bash -c 'ssh-add <priv_key>; git <command>'
   - Undo last commit: git reset HEAD~
-  - Remove all stale remote branches: git remote prune origin 
+  - Remove all stale remote branches: git remote prune origin
   - Remove tag at remote: git tag -d <tag_name> && git push origin :refs/tags/<tag_name>
   - Add tag: git tag -a <tag> -m "<message>"
   - Push tag to remote: git push origin --tags

@@ -7,7 +7,7 @@ print_usage () {
     return 1;
   fi
 
-  echo "Usage: ${G_PROGNAME} <option> arg";
+  echo "Usage: ${PROGNAME} <option> arg";
   echo "    arg: arg description";
   echo "";
   echo "  Options:";

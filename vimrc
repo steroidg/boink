@@ -1,6 +1,7 @@
 " Stuffs I better remember:
 " ci<character> - Remove stuffs between charecters and edit
 " yi<character> - Yank between characters
+" ysiw<character> - Surround word with characters
 
 " Shell code folding
 set nocompatible
@@ -62,17 +63,22 @@ execute pathogen#infect()
 " https://github.com/tpope/vim-surround.git
 " https://github.com/tmhedberg/SimpylFold.git
 " https://github.com/jistr/vim-nerdtree-tabs.git
+" https://github.com/luochen1990/rainbow.git
 
 " NERDTree
+"autocmd vimenter * NERDTreeMirror
 " Toggle nerdtree with F10
-map <F10> :NERDTreeToggle<CR>
+map <F10> :NERDTreeMirrorToggle<CR>
 " Current file in nerdtree
-map <F9> :NERDTreeFind<CR>
+" map <F9> :NERDTreeFind<CR>
 " Auto start NERDTree
-" autocmd vimenter * NERDTree
+autocmd vimenter * NERDTree
 
 " Enable powerline font for vim-airline
 let g:airline_powerline_fonts = 1
 
 " SimplyFold options
 let g:SimpylFold_docstring_preview = 1
+
+" Rainbow brackets
+let g:rainbow_active = 1 "0 if you want to enable it later via :RainbowToggle
