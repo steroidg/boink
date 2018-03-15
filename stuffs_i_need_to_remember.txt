@@ -18,6 +18,7 @@ Shell:
   - if/else shorthand : [ test ] && action || action
   - Run function at background: <func_name> >> /dev/null &
   - Make sure result is a number: grep -E '^[0-9]+$'
+  - Better regex grep: grep -Po '<regex>'
   - Make variable readonly: readonly <VAR_NAME> or readonly <VAR_NAME>=<value>
   - To find infinite symlink loops: find -L | grep "part of a loop"
   - To find broken symlinks: find -L . -type l

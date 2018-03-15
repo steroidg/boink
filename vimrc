@@ -72,7 +72,7 @@ map <F10> :NERDTreeMirrorToggle<CR>
 " Current file in nerdtree
 " map <F9> :NERDTreeFind<CR>
 " Auto start NERDTree
-autocmd vimenter * NERDTree
+" autocmd vimenter * NERDTree
 
 " Enable powerline font for vim-airline
 let g:airline_powerline_fonts = 1
