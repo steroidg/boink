@@ -1,0 +1,13 @@
+#!/bin/bash
+
+if [ ! -d ./manifests ]; then
+  echo "ERROR: can't find manifests directory."
+fi
+
+puppet-lint --no-140chars-check ./manifests 2>&1
+
+if [ $? -ne 0 ]; then
+  exit 1
+fi
+
+exit 0

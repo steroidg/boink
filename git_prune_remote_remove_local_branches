@@ -17,6 +17,7 @@ fi
 readonly LOCAL_BRANCHES=`git branch | cut -c 3-`;
 
 for i in ${LOCAL_BRANCHES}; do
+  ANSWER=''
   REMOTE_CHECK=`git branch -r | cut -d '/' -f 2 | grep -v HEAD | grep "^${i}$"`;
   if [ -z "${REMOTE_CHECK}" ]; then
     echo "Branch: ${i} is not available remote, remove locally? (Y/N)";

@@ -209,6 +209,8 @@ Git:
   - Remove local branch: git branch -d <branch_name>
   - Revert commit: git revert <commit_ref>
   - Search through all branches: git grep <regex> $(git branch -a | grep -v HEAD | grep -v '*') <file_name(optional)>
+  - Set file mode: git update-index --chmod=<mode> <path/to/file>
+  - Show location of branch heads git show-ref --heads
 
 
 Systemd:

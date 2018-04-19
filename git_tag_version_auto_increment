@@ -5,8 +5,11 @@ print_usage () {
     echo "Usage: ${G_PROGNAME} <option>";
     echo "";
     echo "  Options:";
-    echo "    -l: Incremental level. Valid entries:"
-    echo "        major minor patch prerelease";
+    echo "    -l: Incremental level."
+    echo "        Valid entries:"
+    echo "          major minor patch prerelease";
+    echo "        Default value:"
+    echo "          patch";
     echo "    -p: Prefix string that comes before version number"
     echo "        i.e 'v' for v1.0.0";
     echo "    -d: Debug mode.";
@@ -20,7 +23,7 @@ print_usage () {
     readonly G_PROGNAME=`basename $0`;
     G_PREFIX='';
     G_LEVEL='patch';
-    
+
     while getopts dhp:l: opts; do
         case ${opts} in
             l) G_LEVEL=${OPTARG};
@@ -85,7 +88,7 @@ print_usage () {
         exit 1;
     fi
 
-    readonly GIT_TAG_CMD="git tag -a ${G_PREFIX}${G_INC_VER} -m \"${G_PREFIX}${G_INC_VER} incremental release\"";
+    readonly GIT_TAG_CMD="git tag -a ${G_PREFIX}${G_INC_VER} -m \"${G_PREFIX}${G_INC_VER} ${G_LEVEL} release\"";
     readonly GIT_PUSH_CMD="git push origin ${G_PREFIX}${G_INC_VER}";
     echo "I'm about to issue the following 2 commands:";
     echo "  ${GIT_TAG_CMD}"
