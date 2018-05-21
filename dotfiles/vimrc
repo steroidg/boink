@@ -18,6 +18,7 @@ set switchbuf=usetab,newtab
 set expandtab
 set tabstop=2
 set shiftwidth=2
+set diffopt+=vertical
 
 
 " Wildmode and wildmenu setting for better command completion
@@ -68,7 +69,7 @@ execute pathogen#infect()
 " NERDTree
 "autocmd vimenter * NERDTreeMirror
 " Toggle nerdtree with F10
-map <F10> :NERDTreeMirrorToggle<CR>
+map <F9> :NERDTreeMirrorToggle<CR>
 " Current file in nerdtree
 " map <F9> :NERDTreeFind<CR>
 " Auto start NERDTree
