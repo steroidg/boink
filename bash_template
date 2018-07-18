@@ -1,34 +1,37 @@
 #!/usr/bin/env bash
 
 print_usage () {
-  local readonly PROGNAME="${1}";
+  local readonly PROGNAME="${1}"
   if [ -z "${PROGNAME}" ]; then
-    echo "${FUNCNAME}: line:${LINENO} ERROR: No program name specified.";
-    return 1;
+    echo "${FUNCNAME}: line:${LINENO} ERROR: No program name specified."
+    return 1
   fi
 
-  echo "Usage: ${PROGNAME} <option> arg";
-  echo "    arg: arg description";
+  echo "Usage: ${PROGNAME} <option> arg"
+  echo "    arg: arg description"
   echo "";
-  echo "  Options:";
-  echo "    -d: Debug mode.";
-  echo "    -h: Print out this message.";
+  echo "  Options:"
+  echo "    -d: Debug mode."
+  echo "    -h: Print out this message."
 
-  return 0;
+  return 0
 }
 
 
 main () {
-  DEBUG_MODE='OFF';
-  local readonly PROGNAME=`basename $0`;
+  DEBUG_MODE='OFF'
+  local readonly PROGNAME=`basename $0`
 
   while getopts dh opts; do
     case ${opts} in
-      d) readonly DEBUG_MODE='ON';;
-      h) print_usage ${PROGNAME};
-         exit 0;;
-      *) print_usage ${PROGNAME};
-         exit 0;;
+      d) DEBUG_MODE='ON'
+         ;;
+      h) print_usage ${PROGNAME}
+         exit 0
+         ;;
+      *) print_usage ${PROGNAME}
+         exit 0
+         ;;
     esac
   done
   shift `expr ${OPTIND} - 1`
@@ -36,12 +39,12 @@ main () {
   readonly DEBUG_MODE;
 
   if [ $# -ne 1 ]; then
-    echo "ERROR: Wrong number of arguments.";
-    print_usage;
-    exit 1;
+    echo "ERROR: Wrong number of arguments."
+    print_usage
+    exit 1
   fi
 
-  exit 0;
+  exit 0
 }
 
 main "$@"
