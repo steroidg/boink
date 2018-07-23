@@ -1,0 +1,44 @@
+#!/bin/bash
+# Script I wrote to generate math questions for Luc
+
+QF=./question_file
+AF=./answer_file
+
+i=0
+CURRENT_NUMBER=$(((RANDOM % 99) + 1))
+CURRENT_RESULT=$((0 + CURRENT_NUMBER))
+CURRENT_STR=$CURRENT_NUMBER
+while [ $i -lt 4 ]; do
+  if [ $CURRENT_RESULT -gt 90 ]; then
+    OPERATION='-'
+  elif [ $CURRENT_RESULT -lt 10 ]; then
+    OPERATION='+'
+  elif [ `echo $((RANDOM % 2))` -ne 0 ]; then
+    OPERATION='+'
+  else
+    OPERATION='-'
+  fi
+
+  if [ $OPERATION == '+' ]; then
+    NEW_NUMBER=$(((RANDOM % (99 - CURRENT_RESULT)) + 1))
+    while [ `expr ${CURRENT_RESULT: -1} + ${NEW_NUMBER: -1}` -gt 10 ]; do
+      NEW_NUMBER=$(((RANDOM % (99 - CURRENT_RESULT)) + 1))
+    done
+  else
+    NEW_NUMBER=$(((RANDOM % CURRENT_RESULT) + 1))
+    while [ `expr ${CURRENT_RESULT: -1} - ${NEW_NUMBER: -1}` -lt 0 ]; do
+      NEW_NUMBER=$(((RANDOM % CURRENT_RESULT) + 1))
+    done
+  fi
+
+  CURRENT_NUMBER=${NEW_NUMBER}
+
+  NEW_RESULT=`expr ${CURRENT_RESULT} ${OPERATION} ${NEW_NUMBER}`
+  CURRENT_STR="$CURRENT_STR $OPERATION $CURRENT_NUMBER"
+  CURRENT_RESULT=$NEW_RESULT
+
+  i=`expr $i + 1`
+done
+
+echo ${CURRENT_STR} = >> $QF
+echo ${CURRENT_STR} = ${CURRENT_RESULT} >> $AF
