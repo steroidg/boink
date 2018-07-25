@@ -21,7 +21,7 @@ while [ $i -lt 4 ]; do
 
   if [ $OPERATION == '+' ]; then
     NEW_NUMBER=$(((RANDOM % (99 - CURRENT_RESULT)) + 1))
-    while [ `expr ${CURRENT_RESULT: -1} + ${NEW_NUMBER: -1}` -gt 10 ]; do
+    while [ `expr ${CURRENT_RESULT: -1} + ${NEW_NUMBER: -1}` -ge 10 ]; do
       NEW_NUMBER=$(((RANDOM % (99 - CURRENT_RESULT)) + 1))
     done
   else
