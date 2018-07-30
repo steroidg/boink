@@ -4,12 +4,9 @@
 QF=./question_file
 AF=./answer_file
 
-CURRENT_NUMBER=$(((RANDOM % 5) + 1))
+CURRENT_NUMBER=$(((RANDOM % 6) + 1))
 CURRENT_RESULT=$((0 + CURRENT_NUMBER))
 CURRENT_STR=$CURRENT_NUMBER
-
-echo $CURRENT_STR;
-
 
 i=0
 while [ $i -lt 1 ]; do
@@ -17,8 +14,6 @@ while [ $i -lt 1 ]; do
 
   NEW_NUMBER=$(((RANDOM % 9) + 1))
   CURRENT_NUMBER=${NEW_NUMBER}
-
-
 
   NEW_RESULT=$((${CURRENT_RESULT} * ${NEW_NUMBER}))
   CURRENT_STR="$CURRENT_STR $OPERATION $CURRENT_NUMBER"
