@@ -19,12 +19,11 @@ if [ "${REGISTRY_FILE_1}" == "${REGISTRY_FILE_2}" ]; then
     N_LINES=1;
 fi
 
-[ -f ${DUP_LIST} ] && truncate -s 0 ${DUP_LIST};
 
 IFS=$'\n';
 for i in `cat ${REGISTRY_FILE_1}`; do
-    MD5=`echo $i | awk '{print $1}';
-    FN=`echo $i | awk '{print $2}';
+    MD5=`echo ${i} | awk '{print $1}'`;
+    FN=`echo ${i} | cut -d ' ' -f 3-`;
     DUP_LINE=`cat ${REGISTRY_FILE_2} | grep ^${MD5}`
     DUP_FOUND=`echo "${DUP_LINE}" | wc -l`;
     if [ ${DUP_FOUND} -gt ${N_LINES} ]; then
