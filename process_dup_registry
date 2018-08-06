@@ -1,0 +1,88 @@
+#!/usr/bin/env bash
+
+print_usage () {
+  local readonly PROGNAME="${1}"
+  if [ -z "${PROGNAME}" ]; then
+    echo "${FUNCNAME}: line:${LINENO} ERROR: No program name specified."
+    return 1
+  fi
+
+  echo "Usage: ${PROGNAME} <option> dup_registry_file"
+  echo "    dup_registry_file: Duplication registry file in format of lines of md5sums"
+  echo "";
+  echo "  Options:"
+  echo "    -d: Debug mode."
+  echo "    -h: Print out this message."
+
+  return 0
+}
+
+
+process_dup_registry () {
+  if [ $# -ne 1 ]; then
+    echo "${FUNCNAME}: line:${LINENO} ERROR: Wrong number of arguments."
+    return 1
+  fi
+
+  local readonly DUP_REGISTRY_FILE=$1
+
+  if [ ! -f ${DUP_REGISTRY_FILE} ]; then
+    echo "${FUNCNAME}: line:${LINENO} ERROR: ${DUP_REGISTRY_FILE} is not a regular file."
+  fi
+
+  IFS=$'\n'
+  for i in `cat $DUP_REGISTRY_FILE | awk '{print $1}' | uniq`; do
+    echo ${i}
+    local FOUND_FILE=''
+    for j in `cat $DUP_REGISTRY_FILE | grep ^${i} | cut -d ' ' -f 3-`; do
+      if [ -z "${FOUND_FILE}" ]; then
+        local FOUND_FILE=${j}
+        echo "save '${j}'"
+      else
+        if [ ! -f "${j}" ]; then
+          echo "${FUNCNAME}: line:${LINENO} ERROR: ${j} is not a regular file."
+          return 1
+        fi
+        ls -la "${j}"
+      fi
+    done
+  done
+  unset IFS
+
+  return 0
+}
+
+
+main () {
+  DEBUG_MODE='OFF'
+  local readonly PROGNAME=`basename $0`
+
+  while getopts dh opts; do
+    case ${opts} in
+      d) DEBUG_MODE='ON'
+         ;;
+      h) print_usage ${PROGNAME}
+         exit 0
+         ;;
+      *) print_usage ${PROGNAME}
+         exit 0
+         ;;
+    esac
+  done
+  shift `expr ${OPTIND} - 1`
+
+  readonly DEBUG_MODE;
+
+  if [ $# -ne 1 ]; then
+    echo "ERROR: Wrong number of arguments."
+    print_usage ${PROGNAME}
+    exit 1
+  fi
+
+  local readonly DUP_REGISTRY_FILE=$1
+
+  process_dup_registry ${DUP_REGISTRY_FILE} || exit 1
+  exit 0
+}
+
+main "$@"
