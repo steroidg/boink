@@ -4,7 +4,7 @@
 QF=./question_file
 AF=./answer_file
 
-CURRENT_NUMBER=$(((RANDOM % 6) + 1))
+CURRENT_NUMBER=$(((RANDOM % 9) + 1))
 CURRENT_RESULT=$((0 + CURRENT_NUMBER))
 CURRENT_STR=$CURRENT_NUMBER
 
