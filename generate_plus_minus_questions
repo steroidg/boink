@@ -1,0 +1,159 @@
+#!/usr/bin/env bash
+# Script I wrote to generate math questions for Luc
+
+print_usage () {
+  local readonly PROGNAME="${1}"
+  if [ -z "${PROGNAME}" ]; then
+    echo "${FUNCNAME}: line:${LINENO} ERROR: No program name specified."
+    return 1
+  fi
+
+  echo "Usage: ${PROGNAME} <option> output_file"
+  echo "    output_file: file name of output."
+  echo "";
+  echo "  Options:"
+  echo "    -d: Debug mode."
+  echo "    -q: Print questions without answers."
+  echo "    -h: Print out this message."
+
+  return 0
+}
+
+check_file () {
+  if [ $# -ne 1 ]; then
+    echo "${FUNCNAME}: line:${LINENO} ERROR: Invalid number of arguments."
+    return 1
+  fi
+
+  local readonly FILE_NAME=${1}
+
+  if [ -f ${FILE_NAME} ]; then
+    read -p "${FILE_NAME} already exists, do you want to overwirte? (Y/N) " ANSWER
+    case ${ANSWER} in
+      [Yy]) truncate -s 0 ${FILE_NAME}
+            ;;
+      [Nn]) return 0
+            ;;
+      *)    echo "Invalid response."
+            return 1
+            ;;
+    esac
+  fi
+
+  return 0
+}
+
+generate_equation () {
+  local ENUMERATION=${1}
+  local i=1
+  local CURRENT_NUMBER=$(((RANDOM % RANDOM_LIMIT) + 1))
+  local CURRENT_RESULT=$((0 + CURRENT_NUMBER))
+  local CURRENT_STR=$CURRENT_NUMBER
+
+  while [ $i -lt ${NUMBER_OF_NUMBERS} ]; do
+    if [ $CURRENT_RESULT -gt 90 ]; then
+      local OPERATION='-'
+    elif [ $CURRENT_RESULT -lt 10 ]; then
+      local OPERATION='+'
+    elif [ `echo $((RANDOM % 2))` -ne 0 ]; then
+      local OPERATION='+'
+    else
+      local OPERATION='-'
+    fi
+
+    if [ $OPERATION == '+' ]; then
+      local NEW_NUMBER=$(((RANDOM % (RANDOM_LIMIT - CURRENT_RESULT)) + 1))
+  #    while [ `expr ${CURRENT_RESULT: -1} + ${NEW_NUMBER: -1}` -ge 10 ]; do
+  #      local NEW_NUMBER=$(((RANDOM % (99 - CURRENT_RESULT)) + 1))
+  #    done
+    else
+      local NEW_NUMBER=$(((RANDOM % CURRENT_RESULT) + 1))
+      while [ `expr ${CURRENT_RESULT: -1} - ${NEW_NUMBER: -1}` -lt 0 ]; do
+        local NEW_NUMBER=$(((RANDOM % CURRENT_RESULT) + 1))
+      done
+    fi
+
+    local CURRENT_NUMBER=${NEW_NUMBER}
+    local NEW_RESULT=`expr ${CURRENT_RESULT} ${OPERATION} ${NEW_NUMBER}`
+    local CURRENT_STR="$CURRENT_STR $OPERATION $CURRENT_NUMBER"
+    local CURRENT_RESULT=$NEW_RESULT
+
+    local i=`expr $i + 1`
+  done
+
+  if [ -n "${ENUMERATION}" ]; then
+    echo "${ENUMERATION}. ${CURRENT_STR} = ${CURRENT_RESULT}" >> $AF
+    ${PRINT_QUESTION} && echo "${ENUMERATION}. ${CURRENT_STR} =" >> $QF
+  else
+    echo ${CURRENT_STR} = ${CURRENT_RESULT} >> $AF
+    ${PRINT_QUESTION} && echo ${CURRENT_STR} = >> $QF
+  fi
+
+  return 0
+}
+
+main () {
+  DEBUG_MODE='OFF'
+  local readonly PROGNAME=`basename $0`
+  local PRINT_QUESTION=false
+  local DISABLE_ENUMERATION=false
+  local NUMBER_OF_LINES=10
+  local NUMBER_OF_NUMBERS=5
+  local RANDOM_LIMIT=99
+
+  while getopts r:dhqen:b: opts; do
+    case ${opts} in
+      d) DEBUG_MODE='ON'
+         ;;
+      q) local PRINT_QUESTION=true
+         ;;
+      e) local DISABLE_ENUMERATION=true
+         ;;
+      r) local RANDOM_LIMIT=${OPTARG}
+         ;;
+      b) local NUMBER_OF_NUMBERS=${OPTARG}
+         ;;
+      n) local NUMBER_OF_LINES=${OPTARG}
+         ;;
+      h) print_usage ${PROGNAME}
+         exit 0
+         ;;
+      *) print_usage ${PROGNAME}
+         exit 0
+         ;;
+    esac
+  done
+  shift `expr ${OPTIND} - 1`
+
+  readonly DEBUG_MODE;
+
+  if [ $# -ne 1 ]; then
+    echo "ERROR: Wrong number of arguments."
+    print_usage ${PROGNAME}
+    exit 1
+  fi
+
+  local readonly AF=${1}
+  check_file ${AF} || exit 1
+
+  if ${PRINT_QUESTION}; then
+    local readonly QF="${AF}_Q"
+    check_file ${QF} || exit 1
+  fi
+
+  local i=0;
+  while [ ${i} -lt ${NUMBER_OF_LINES} ]; do
+    local i=`expr ${i} + 1`
+    if ${DISABLE_ENUMERATION}; then
+      local ENUMERATION=''
+    else
+      local ENUMERATION=${i}
+    fi
+
+    generate_equation ${ENUMERATION} || exit 1
+  done
+
+  exit 0
+}
+
+main "$@"
