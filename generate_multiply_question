@@ -4,7 +4,10 @@
 QF=./question_file
 AF=./answer_file
 
-CURRENT_NUMBER=$(((RANDOM % 9) + 1))
+CURRENT_NUMBER=0
+while [ ${CURRENT_NUMBER} -le 1 ]; do
+  CURRENT_NUMBER=$(((RANDOM % 9) + 1))
+done
 CURRENT_RESULT=$((0 + CURRENT_NUMBER))
 CURRENT_STR=$CURRENT_NUMBER
 
@@ -12,7 +15,10 @@ i=0
 while [ $i -lt 1 ]; do
   OPERATION='x'
 
-  NEW_NUMBER=$(((RANDOM % 9) + 1))
+  NEW_NUMBER=0
+  while [ ${NEW_NUMBER} -le 1 ]; do
+    NEW_NUMBER=$(((RANDOM % 9) + 1))
+  done
   CURRENT_NUMBER=${NEW_NUMBER}
 
   NEW_RESULT=$((${CURRENT_RESULT} * ${NEW_NUMBER}))
