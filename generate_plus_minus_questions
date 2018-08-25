@@ -13,7 +13,12 @@ print_usage () {
   echo "";
   echo "  Options:"
   echo "    -d: Debug mode."
-  echo "    -q: Print questions without answers."
+  echo "    -q: Print questions without answers with a '_Q' sudffix."
+  echo "    -e: Disable enumeration."
+  echo "    -l: Limit to operation within 10."
+  echo "    -r: Random number limit (default: 99)."
+  echo "    -b: Number of numbers in question (default: 5)."
+  echo "    -n: Number of questions to generation (default: 10)."
   echo "    -h: Print out this message."
 
   return 0
@@ -51,7 +56,9 @@ generate_equation () {
   local CURRENT_STR=$CURRENT_NUMBER
 
   while [ $i -lt ${NUMBER_OF_NUMBERS} ]; do
-    if [ $CURRENT_RESULT -gt 90 ]; then
+    ${DEBUG_MODE} && echo "DEBUG: Number_of_numbers = ${i}"
+
+    if [ $CURRENT_RESULT -gt $((RANDOM_LIMIT - 10)) ]; then
       local OPERATION='-'
     elif [ $CURRENT_RESULT -lt 10 ]; then
       local OPERATION='+'
@@ -63,9 +70,37 @@ generate_equation () {
 
     if [ $OPERATION == '+' ]; then
       local NEW_NUMBER=$(((RANDOM % (RANDOM_LIMIT - CURRENT_RESULT)) + 1))
-  #    while [ `expr ${CURRENT_RESULT: -1} + ${NEW_NUMBER: -1}` -ge 10 ]; do
-  #      local NEW_NUMBER=$(((RANDOM % (99 - CURRENT_RESULT)) + 1))
-  #    done
+      local N_LEN=${#NEW_NUMBER}
+      local C_LEN=${#CURRENT_RESULT}
+      local j=$((N_LEN - 1))
+      local k=$((C_LEN - 1))
+
+      if ${APPLY_LIMIT}; then
+        $DEBUG_MODE && echo "DEBUG: CURRENT_RESULT = ${CURRENT_RESULT}"
+        $DEBUG_MODE && echo "DEBUG: NEW_NUMBER = ${NEW_NUMBER}"
+        while [ ${j} -ge 0 ]; do
+          ${DEBUG_MODE} && echo "DEBUG: NEW_NUMBER position = ${j}"
+          local CN=${CURRENT_RESULT:${k}:1}
+          [ -z ${CN} -o ${k} -lt 0 ] && local CN=0
+          local NN=${NEW_NUMBER:${j}:1}
+          [ -z ${NN} ] && local NN=0
+          $DEBUG_MODE && echo "DEBUG: Initial CN = ${CN} NN = ${NN}"
+
+          # We need to construct a new number based on the criteria
+          if [ ${CN} -ne 0 ]; then
+            while [ $((CN + NN)) -ge 10 -a $((CN + NN)) -ne 0 -a -n "${NEW_NUMBER}" -a ${NEW_NUMBER} -gt 0 ]; do
+              local NN=$((RANDOM % 9))
+              ${DEBUG_MODE} && echo "DEBUG: Replacement NN = ${NN}"
+
+              local NN_STR="${NN}"
+              local NEW_NUMBER=`echo ${NEW_NUMBER} | sed s/./${NN_STR}/$((j + 1))`
+              ${DEBUG_MODE} && echo "DEBUG: Replacement NEW_NUMBER =  ${NEW_NUMBER}"
+            done
+          fi
+          local j=`expr ${j} - 1`
+          local k=`expr ${k} - 1`
+        done
+      fi
     else
       local NEW_NUMBER=$(((RANDOM % CURRENT_RESULT) + 1))
       while [ `expr ${CURRENT_RESULT: -1} - ${NEW_NUMBER: -1}` -lt 0 ]; do
@@ -93,21 +128,24 @@ generate_equation () {
 }
 
 main () {
-  DEBUG_MODE='OFF'
+  DEBUG_MODE=false
   local readonly PROGNAME=`basename $0`
   local PRINT_QUESTION=false
   local DISABLE_ENUMERATION=false
   local NUMBER_OF_LINES=10
   local NUMBER_OF_NUMBERS=5
   local RANDOM_LIMIT=99
+  local APPLY_LIMIT=false
 
-  while getopts r:dhqen:b: opts; do
+  while getopts r:dlhqen:b: opts; do
     case ${opts} in
-      d) DEBUG_MODE='ON'
+      d) DEBUG_MODE=true
          ;;
       q) local PRINT_QUESTION=true
          ;;
       e) local DISABLE_ENUMERATION=true
+         ;;
+      l) local APPLY_LIMIT=true
          ;;
       r) local RANDOM_LIMIT=${OPTARG}
          ;;
@@ -125,11 +163,22 @@ main () {
   done
   shift `expr ${OPTIND} - 1`
 
-  readonly DEBUG_MODE;
+  readonly DEBUG_MODE
+  readonly PRINT_QUESTION
+  readonly DISABLE_ENUMERATION
+  readonly APPLY_LIMIT
+  readonly RANDOM_LIMIT
+  readonly NUMBER_OF_NUMBERS
+  readonly NUMBER_OF_LINES
 
   if [ $# -ne 1 ]; then
     echo "ERROR: Wrong number of arguments."
     print_usage ${PROGNAME}
+    exit 1
+  fi
+
+  if [ ${RANDOM_LIMIT} -lt 20 ]; then
+    echo "ERROR: Random limit too low."
     exit 1
   fi
 
@@ -143,6 +192,7 @@ main () {
 
   local i=0;
   while [ ${i} -lt ${NUMBER_OF_LINES} ]; do
+    ${DEBUG_MODE} && echo "DEBUG: Equation number = ${i}"
     local i=`expr ${i} + 1`
     if ${DISABLE_ENUMERATION}; then
       local ENUMERATION=''
