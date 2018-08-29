@@ -162,6 +162,7 @@ General linux:
   - Join server to AD: net ads join -U <uname> computername=<OU/host_name>
   - wget with IPv6 IP, put IP between []. I.e.: wget http://[IPv6_IP].
   - Remove IPv6 address from interface: ip -6 addr del <ipv6address>/<prefixlength> dev <interface>
+  - Add user into group: usermod -a -G <group_name> <user>
 
 
 Misc:
@@ -211,6 +212,8 @@ Git:
   - Search through all branches: git grep <regex> $(git branch -a | grep -v HEAD | grep -v '*') <file_name(optional)>
   - Set file mode: git update-index --chmod=<mode> <path/to/file>
   - Show location of branch heads git show-ref --heads
+  - To close a github issue, use 'Close #<issue_number>' in commit message.
+  - Generate nice git log with graph: git log --oneline --graph
 
 
 Systemd:
