@@ -75,7 +75,7 @@ generate_equation () {
       local j=$((N_LEN - 1))
       local k=$((C_LEN - 1))
 
-      if ${APPLY_LIMIT}; then
+      if ${APPLY_PLUS_LIMIT}; then
         $DEBUG_MODE && echo "DEBUG: CURRENT_RESULT = ${CURRENT_RESULT}"
         $DEBUG_MODE && echo "DEBUG: NEW_NUMBER = ${NEW_NUMBER}"
         while [ ${j} -ge 0 ]; do
@@ -103,9 +103,11 @@ generate_equation () {
       fi
     else
       local NEW_NUMBER=$(((RANDOM % CURRENT_RESULT) + 1))
-      while [ `expr ${CURRENT_RESULT: -1} - ${NEW_NUMBER: -1}` -lt 0 ]; do
-        local NEW_NUMBER=$(((RANDOM % CURRENT_RESULT) + 1))
-      done
+      if $APPLY_MINUS_LIMIT; then
+        while [ `expr ${CURRENT_RESULT: -1} - ${NEW_NUMBER: -1}` -lt 0 ]; do
+          local NEW_NUMBER=$(((RANDOM % CURRENT_RESULT) + 1))
+        done
+      fi
     fi
 
     local CURRENT_NUMBER=${NEW_NUMBER}
@@ -135,9 +137,10 @@ main () {
   local NUMBER_OF_LINES=10
   local NUMBER_OF_NUMBERS=5
   local RANDOM_LIMIT=99
-  local APPLY_LIMIT=false
+  local APPLY_PLUS_LIMIT=false
+  local APPLY_MINUS_LIMIT=false
 
-  while getopts r:dlhqen:b: opts; do
+  while getopts r:dpmhqen:b: opts; do
     case ${opts} in
       d) DEBUG_MODE=true
          ;;
@@ -145,7 +148,9 @@ main () {
          ;;
       e) local DISABLE_ENUMERATION=true
          ;;
-      l) local APPLY_LIMIT=true
+      p) local APPLY_PLUS_LIMIT=true
+         ;;
+      m) local APPLY_MINUS_LIMIT=true
          ;;
       r) local RANDOM_LIMIT=${OPTARG}
          ;;
@@ -166,7 +171,8 @@ main () {
   readonly DEBUG_MODE
   readonly PRINT_QUESTION
   readonly DISABLE_ENUMERATION
-  readonly APPLY_LIMIT
+  readonly APPLY_PLUS_LIMIT
+  readonly APPLY_MINUS_LIMIT
   readonly RANDOM_LIMIT
   readonly NUMBER_OF_NUMBERS
   readonly NUMBER_OF_LINES
