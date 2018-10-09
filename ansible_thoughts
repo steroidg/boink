@@ -1,0 +1,16 @@
+Pros:
+- Tasks are performed in an orderly fashion that's easy to understand.
+- Can become a non priviledged user.
+- Vault is built into the command.
+- Doesn't need infrastructure so it's easy to integrate.
+- Everything can be in yaml, which is easy to read.
+
+Cons:
+- Postgresql module requrie non priviledged user to perform tasks.
+- Non-priviledged users fiddly (needs to enable pipe)
+- Package management module inconsistent (apt accepts lists where as npm doesn't)
+- While there is data/code separation, so far I haven't seen anything that matches the capability of hiera.
+- Push model which requries client side dependency fiddling.
+- I find the presence of spaces in data disturbing.
+- Failed to start service resource appears as changed instead of failed.
+- Lack of r10k equivalent capability.
