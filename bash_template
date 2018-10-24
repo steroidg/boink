@@ -3,7 +3,7 @@
 print_usage () {
   local readonly PROGNAME="${1}"
   if [ -z "${PROGNAME}" ]; then
-    echo "${FUNCNAME}: line:${LINENO} ERROR: No program name specified."
+    echo "f[${FUNCNAME}]:l[${LINENO}] ERROR: No program name specified."
     return 1
   fi
 
