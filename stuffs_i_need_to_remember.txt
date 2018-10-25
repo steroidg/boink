@@ -214,6 +214,7 @@ Git:
   - Show location of branch heads git show-ref --heads
   - To close a github issue, use 'Close #<issue_number>' in commit message.
   - Generate nice git log with graph: git log --oneline --graph
+  - Configure git on a per repo basis: git config user.email "<email>" && git config user.name "<name>"
 
 
 Systemd:
