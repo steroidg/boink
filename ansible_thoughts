@@ -4,13 +4,35 @@ Pros:
 - Vault is built into the command.
 - Doesn't need infrastructure so it's easy to integrate.
 - Everything can be in yaml, which is easy to read.
+- Custom facts can be in any language as long as it outputs JSON.
+- Loops can have sequences not sure if puppet has it or not
+- Recovery capability can be useful for CR
+- Can use delegation for similar functionality as exported resources (as long as the requirement is not an array) without a backend db (although it can't create variables dynamically like exported resources as far as I've been told)
+- tower is opensource > puppet gui
+- tower has multi-tenency suuport, not sure about PE
 
 Cons:
+- Inventory can be written in ini or yaml but not json, but dynamic inventory read in json which can be confusing.
 - Postgresql module requrie non priviledged user to perform tasks.
 - Non-priviledged users fiddly (needs to enable pipe)
 - Package management module inconsistent (apt accepts lists where as npm doesn't)
 - While there is data/code separation, so far I haven't seen anything that matches the capability of hiera.
+- Variables has 3 scopes, not as flexible as hiera (i.e can't have variables based on OS, custom fact).
+- Custom facts are files not executables so are more static
 - Push model which requries client side dependency fiddling.
 - I find the presence of spaces in data disturbing.
 - Failed to start service resource appears as changed instead of failed.
 - Lack of r10k equivalent capability.
+- Inconsistent syntax requirement (variables requires double quotes where as task names can have spaces without quotes)
+- Custom facts can be in INI or JSON, but not YAML. Again, inconsistency.
+- Host vars in inventory can be in INI, but group vars has to be in YAML. Inconsistent!
+- Included vars can be in YAML and JSON but not in INI. Inconsistent!
+- Custom facts executables needs to be in /etc/ansible/fats.d, can't have project based custom facts yet.
+- Custom fact binaries has to be populated on managed hosts' /etc/ansible/fats.d directory first. So anything that requires values from custom facts can only be accomplished on the 2nd run.
+- Can't use conditional at anything other than task level
+- playbook syntax error is pretty hard to fix
+- Conditional statement apparently shouldn't use double curly brackets for variables unlike the rest of the code base. Talk about consistency!
+- this might not be an issue normally, but during the training, there's no access to any linting tool which made syntax diagnostic very hard.
+- ansible-galaxy doesn't have version/release control (always latest)
+- ansible-vault can't do public key encryption
+- The level of abstraction of the core modules is quite lacking. By example haproxy can't seem to workout the socket it needs to use on Ubuntu and had to be specified.
