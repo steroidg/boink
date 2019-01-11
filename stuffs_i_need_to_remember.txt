@@ -134,6 +134,7 @@ ssh tricks:
   - Reset ssh passphrase: ssh-keygen -f id_rsa -p
   - Regenerate pub key: ssh-keygen -y -f ~/.ssh/id_rsa > ~/.ssh/id_rsa.pub
   - Convert a ssh pub key to correct format: ssh-keygen -i -f <pub_key>
+  - ssh/scp into vagrant: ssh $(vagrant ssh-config | awk 'NR>1 {print " -o "$1"="$2}') localhost
 
 
 General linux:
@@ -163,6 +164,7 @@ General linux:
   - wget with IPv6 IP, put IP between []. I.e.: wget http://[IPv6_IP].
   - Remove IPv6 address from interface: ip -6 addr del <ipv6address>/<prefixlength> dev <interface>
   - Add user into group: usermod -a -G <group_name> <user>
+  - Make json readable: <json_output> | python -m json.tool
 
 
 Misc:
@@ -170,6 +172,7 @@ Misc:
   - Training costcode 8202
   - Start all rtorrent tasks: Ctrl-X then d.multicall=,d.start=
   - Stop all rtorrent tasks: Ctrl-X then d.multicall=,d.stop=
+  - Run command in split screen in vim: new | 0read ! <cmd>
 
 
 Windowz:
@@ -227,3 +230,6 @@ VM tricks:
 
 Postgresql:
   - List tables \dt
+
+Vim tricks:
+  - Open output of command in new split window `new | 0read ! <command>`

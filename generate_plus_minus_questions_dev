@@ -51,7 +51,11 @@ check_file () {
 generate_equation () {
   local ENUMERATION=${1}
   local i=1
-  local CURRENT_NUMBER=$(((RANDOM % RANDOM_LIMIT) + 1))
+  local CURRENT_NUMBER=0
+  while [ ${CURRENT_NUMBER} -eq 0 ]; do
+    local CURRENT_NUMBER=$((RANDOM % RANDOM_RANGE))
+  done
+
   local CURRENT_RESULT=$((0 + CURRENT_NUMBER))
   local CURRENT_STR=$CURRENT_NUMBER
 
@@ -60,7 +64,7 @@ generate_equation () {
 
     if [ $CURRENT_RESULT -gt $((RANDOM_LIMIT - 10)) ]; then
       local OPERATION='-'
-    elif [ $CURRENT_RESULT -lt 10 ]; then
+    elif [ $CURRENT_RESULT -lt $((LOWER_RANDOM_LIMIT + 10)) ]; then
       local OPERATION='+'
     elif [ `echo $((RANDOM % 2))` -ne 0 ]; then
       local OPERATION='+'
@@ -104,9 +108,9 @@ generate_equation () {
     else
       local NEW_NUMBER=$(((RANDOM % CURRENT_RESULT) + 1))
       if $APPLY_MINUS_LIMIT; then
-#        while [ `expr ${CURRENT_RESULT: -1} - ${NEW_NUMBER: -1}` -lt 0 ]; do
+        while [ `expr ${CURRENT_RESULT: -1} - ${NEW_NUMBER: -1}` -lt 0 ]; do
           local NEW_NUMBER=$(((RANDOM % CURRENT_RESULT) + 1))
-#        done
+        done
       fi
     fi
 
@@ -137,10 +141,11 @@ main () {
   local NUMBER_OF_LINES=10
   local NUMBER_OF_NUMBERS=5
   local RANDOM_LIMIT=99
+  local LOWER_RANDOM_LIMIT=0
   local APPLY_PLUS_LIMIT=false
   local APPLY_MINUS_LIMIT=false
 
-  while getopts r:dpmhqen:b: opts; do
+  while getopts r:dpmhqen:b:l: opts; do
     case ${opts} in
       d) DEBUG_MODE=true
          ;;
@@ -153,6 +158,8 @@ main () {
       m) local APPLY_MINUS_LIMIT=true
          ;;
       r) local RANDOM_LIMIT=${OPTARG}
+         ;;
+      l) local LOWER_RANDOM_LIMIT=${OPTARG}
          ;;
       b) local NUMBER_OF_NUMBERS=${OPTARG}
          ;;
@@ -174,8 +181,19 @@ main () {
   readonly APPLY_PLUS_LIMIT
   readonly APPLY_MINUS_LIMIT
   readonly RANDOM_LIMIT
+  readonly LOWER_RANDOM_LIMIT
   readonly NUMBER_OF_NUMBERS
   readonly NUMBER_OF_LINES
+  local readonly ABSV_RANDOM_LIMIT=${RANDOM_LIMIT#-}
+  local readonly ABSV_LOWER_RANDOM_LIMIT=${LOWER_RANDOM_LIMIT#-}
+  if [ ${RANDOM_LIMIT} -gt 0 -a ${LOWER_RANDOM_LIMIT} -lt 0 ]; then
+    local readonly RANDOM_RANGE=$((ABSV_RANDOM_LIMIT + ABSV_LOWER_RANDOM_LIMIT + 1))
+  elif [ ${RANDOM_LIMIT} -gt 0 -a ${LOWER_RANDOM_LIMIT} -ge 0 ]; then
+    local readonly RANDOM_RANGE=$((ABSV_RANDOM_LIMIT - ABSV_LOWER_RANDOM_LIMIT + 1))
+  else
+    local readonly RANDOM_RANGE=$((ABSV_LOWER_RANDOM_LIMIT - ABSV_RANDOM_LIMIT + 1))
+  fi
+  echo $RANDOM_RANGE
 
   if [ $# -ne 1 ]; then
     echo "ERROR: Wrong number of arguments."
@@ -183,8 +201,13 @@ main () {
     exit 1
   fi
 
-  if [ ${RANDOM_LIMIT} -lt 20 ]; then
-    echo "ERROR: Random limit too low."
+  if [ ${RANDOM_RANGE} -lt 20 ]; then
+    echo "ERROR: Random range too low."
+    exit 1
+  fi
+
+  if [ ${RANDOM_LIMIT} -lt ${LOWER_RANDOM_LIMIT} ]; then
+    echo "ERROR: Random limit lower than lower random limit."
     exit 1
   fi
 

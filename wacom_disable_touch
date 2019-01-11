@@ -10,7 +10,8 @@ fi
 
 
 if [ -n "${WACOM_PAD_ID}" ]; then
-	xsetwacom set ${WACOM_PAD_ID} Button 3 "key CTRL z";
+#	xsetwacom set ${WACOM_PAD_ID} Button 3 "key CTRL z";
+	xsetwacom set ${WACOM_PAD_ID} Button 3 "key CTRL SHIFT";
 	xsetwacom set ${WACOM_PAD_ID} Button 8 "key SHIFT =";
 	xsetwacom set ${WACOM_PAD_ID} Button 9 "key -";
 	xsetwacom set ${WACOM_PAD_ID} Button 1 "key CTRL y";
