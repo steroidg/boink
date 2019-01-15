@@ -65,6 +65,7 @@ execute pathogen#infect()
 " https://github.com/tmhedberg/SimpylFold.git
 " https://github.com/jistr/vim-nerdtree-tabs.git
 " https://github.com/luochen1990/rainbow.git
+" https://github.com/pangloss/vim-javascript.git
 
 " NERDTree
 "autocmd vimenter * NERDTreeMirror
