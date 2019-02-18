@@ -3,6 +3,8 @@
 " yi<character> - Yank between characters
 " ysiw<character> - Surround word with characters
 
+set background=dark
+
 " Shell code folding
 set nocompatible
 filetype plugin indent on
@@ -39,10 +41,6 @@ nnoremap <C-Left> gT
 map <F8> :set number!<CR>
 map <F7> :set paste!<CR>
 
-" Enable folding
-set foldmethod=indent
-set foldlevel=99
-
 " Enable folding with the spacebar
 nnoremap <space> za
 
@@ -50,22 +48,38 @@ nnoremap <space> za
 :highlight ExtraWhitespace ctermbg=red guibg=red
 :match ExtraWhitespace /\s\+$/
 
+
+
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+
+" let Vundle manage Vundle, required
+Plugin 'VundleVim/Vundle.vim'
+Plugin 'christoomey/vim-tmux-navigator'
+Plugin 'scrooloose/nerdtree'
+Plugin 'Xuyuanp/nerdtree-git-plugin'
+Plugin 'vim-airline/vim-airline'
+Plugin 'tpope/vim-fugitive'
+Plugin 'airblade/vim-gitgutter'
+Plugin 'rodjek/vim-puppet'
+Plugin 'tpope/vim-surround'
+Plugin 'tmhedberg/SimpylFold'
+Plugin 'jistr/vim-nerdtree-tabs'
+Plugin 'luochen1990/rainbow'
+Plugin 'pangloss/vim-javascript'
+
+" All of your Plugins must be added before the following line
+call vundle#end()            " required
+
 " Enable pathogen
 " https://github.com/tpope/vim-pathogen
 execute pathogen#infect()
 
-" List of pathogen bundles:
-" https://github.com/scrooloose/nerdtree.git
-" https://github.com/Xuyuanp/nerdtree-git-plugin.git
-" https://github.com/vim-airline/vim-airline
-" https://github.com/tpope/vim-fugitive
-" https://github.com/airblade/vim-gitgutter
-" https://github.com/rodjek/vim-puppet
-" https://github.com/tpope/vim-surround.git
-" https://github.com/tmhedberg/SimpylFold.git
-" https://github.com/jistr/vim-nerdtree-tabs.git
-" https://github.com/luochen1990/rainbow.git
-" https://github.com/pangloss/vim-javascript.git
+" Enable folding
+set foldmethod=indent
+set foldlevel=99
+
 
 " NERDTree
 "autocmd vimenter * NERDTreeMirror
@@ -84,3 +98,11 @@ let g:SimpylFold_docstring_preview = 1
 
 " Rainbow brackets
 let g:rainbow_active = 1 "0 if you want to enable it later via :RainbowToggle
+
+let g:tmux_navigator_no_mappings = 1
+
+nnoremap <silent> <C-M-Left> :TmuxNavigateLeft<cr>
+nnoremap <silent> <C-M-Down> :TmuxNavigateDown<cr>
+nnoremap <silent> <C-M-Up> :TmuxNavigateUp<cr>
+nnoremap <silent> <C-M-Right> :TmuxNavigateRight<cr>
+"nnoremap <silent> {Previous-Mapping} :TmuxNavigatePrevious<cr>
