@@ -1,0 +1,12 @@
+#!/bin/sh
+[ -z "${TMUX}" ] && ttmux new-session -d -s 'terms' 'bash'
+tmux split-window -h 'bash'
+tmux split-window -v 'bash'
+tmux select-layout tiled
+tmux split-window -v 'bash'
+tmux select-layout tiled
+tmux split-window -v 'bash'
+tmux select-layout tiled
+tmux split-window -v 'bash'
+tmux select-layout tiled
+[ -z "${TMUX}" ] && tmux -2 attach-session -d
