@@ -3,6 +3,7 @@
 " yi<character> - Yank between characters
 " ysiw<character> - Surround word with characters
 
+" Set background to dark so it looks correctly in tmux
 set background=dark
 
 " Shell code folding
@@ -98,11 +99,3 @@ let g:SimpylFold_docstring_preview = 1
 
 " Rainbow brackets
 let g:rainbow_active = 1 "0 if you want to enable it later via :RainbowToggle
-
-let g:tmux_navigator_no_mappings = 1
-
-nnoremap <silent> <C-M-Left> :TmuxNavigateLeft<cr>
-nnoremap <silent> <C-M-Down> :TmuxNavigateDown<cr>
-nnoremap <silent> <C-M-Up> :TmuxNavigateUp<cr>
-nnoremap <silent> <C-M-Right> :TmuxNavigateRight<cr>
-"nnoremap <silent> {Previous-Mapping} :TmuxNavigatePrevious<cr>

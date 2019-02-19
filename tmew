@@ -1,0 +1,5 @@
+#!/bin/sh
+tmux new-session -d 'bash'
+tmux split-window -v -l3 'sleep 1; tmux resize-pane -y 5; bash'
+tmux split-window -h 'bash'
+tmux -2 attach-session -d
