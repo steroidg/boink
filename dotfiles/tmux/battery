@@ -1,0 +1,17 @@
+#!/bin/bash
+
+BATTERY_DEV=`upower -e | grep -E 'battery|DisplayDevice'| tail -n1`
+if [ -z "${BATTERY_DEV}" ]; then
+  echo "🔋?"
+  exit 1
+fi
+
+BATTERY_PERCENT=`upower -i ${BATTERY_DEV} | grep 'percentage:' | awk '{print $2}' | sed s/\%//`
+BATTERY_STATE=`upower -i ${BATTERY_DEV} | grep 'state:' | awk '{print $2}'`
+
+BATTERY_LOW=''
+[ ${BATTERY_PERCENT} -lt 15 ] && BATTERY_LOW='!!!'
+[ "${BATTERY_STATE}" == 'charging' ] && BATTERY_ICON='⚡' || BATTERY_ICON='🔋'
+echo "${BATTERY_ICON}${BATTERY_PERCENT}%${BATTERY_LOW}"
+
+exit 0
