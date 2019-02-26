@@ -1,3 +1,12 @@
 #!/bin/bash
 
-uptime | awk -F'( |,)+' '{print "⬆"$4"d"$6"m"}' | sed s/:/h/
+UPTIME_OUTPUT=`uptime`
+UPTIME_HAS_DAY=`echo ${UPTIME_OUTPUT} | grep ' day'`
+
+if [ -n "${UPTIME_HAS_DAY}" ]; then
+  echo "${UPTIME_OUTPUT}" | awk -F'( |,)+' '{print "⬆"$4"d"$6"m"}' | sed s/:/h/
+  exit 0
+fi
+
+echo "${UPTIME_OUTPUT}" | awk -F'( |,)+' '{print "⬆"$4"m"}' | sed s/:/h/
+exit 0

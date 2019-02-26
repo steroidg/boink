@@ -2,6 +2,6 @@
 
 cd ~/devel
 [ -z "${TMUX}" ] && tmux new-session -d -s 'work' 'bash'
-tmux split-window -v -l5 'sleep 1; tmux resize-pane -y 5; tmux select-pane -t:.1; bash'
+tmux split-window -v -l5 'sleep 1; tmux resize-pane -y 9; tmux select-pane -t:.1; bash'
 tmux split-window -h 'bash'
 [ -z "${TMUX}" ] && tmux -2 attach-session -d
