@@ -101,3 +101,6 @@ let g:SimpylFold_docstring_preview = 1
 
 " Rainbow brackets
 let g:rainbow_active = 1 "0 if you want to enable it later via :RainbowToggle
+
+" Real time signify update
+let g:signify_realtime = 1
