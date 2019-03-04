@@ -7,9 +7,11 @@ print_usage () {
     return 1
   fi
 
+  echo "Purpose of the script"
+  echo ""
   echo "Usage: ${PROGNAME} <option> arg"
   echo "    arg: arg description"
-  echo "";
+  echo ""
   echo "  Options:"
   echo "    -d: Debug mode."
   echo "    -h: Print out this message."
