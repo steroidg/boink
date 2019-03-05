@@ -206,7 +206,8 @@ Git:
   - Remove all stale remote branches: git remote prune origin
   - Remove tag at remote: git tag -d <tag_name> && git push origin :refs/tags/<tag_name>
   - Add tag: git tag -a <tag> -m "<message>"
-  - Push tag to remote: git push origin --tags
+  - Push a single tag to remote: git push origin <tag_name>
+  - Push all tags to remote: git push origin --tags
   - Reset local branch to remote: git reset --hard origin/<branch_name>
   - Autoyast.xml in /root/autoyast.xml
   - Remove remote branch: git push origin --delete <branch_name>
