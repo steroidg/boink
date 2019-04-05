@@ -86,12 +86,17 @@ set foldlevel=99
 
 " NERDTree
 "autocmd vimenter * NERDTreeMirror
-" Toggle nerdtree with F10
+" Toggle nerdtree with F9
 map <F9> :NERDTreeMirrorToggle<CR>
 " Current file in nerdtree
 " map <F9> :NERDTreeFind<CR>
 " Auto start NERDTree
-" autocmd vimenter * NERDTree
+autocmd vimenter * NERDTree
+" Simplified nerdtree view
+let NERDTreeMinimalUI = 1
+" let NERDTreeDirArrows = 1
+" Open nerdtree in tabs
+autocmd BufWinEnter * NERDTreeMirror
 
 " Enable powerline font for vim-airline
 let g:airline_powerline_fonts = 1
