@@ -21,8 +21,14 @@ print_usage () {
 }
 
 layout_1() {
+  if [ $# -ne 1 ]; then
+    echo "f[${FUNCNAME}]:l[${LINENO}] ERROR: incorrect number of arguments."
+    return 1
+  fi
+
+  local readonly LT_HEIGHT=${1}
   [ -z "${TMUX}" ] && tmux new-session -d -s 'coding' 'bash'
-  tmux split-window -v -l5 'sleep 1; tmux resize-pane -y 9; tmux select-pane -t:.1; bash'
+  tmux split-window -v -l${LT_HEIGHT} "sleep 1; tmux resize-pane -y ${LT_HEIGHT}; tmux select-pane -t:.1; bash"
   tmux split-window -h 'bash'
   [ -z "${TMUX}" ] && tmux -2 attach-session -d
 
@@ -33,11 +39,6 @@ layout_2() {
   [ -z "${TMUX}" ] && tmux new-session -d -s 'terms' 'bash'
   tmux split-window -h 'bash'
   tmux split-window -v 'bash'
-  tmux select-layout tiled
-  tmux split-window -v 'bash'
-  tmux select-layout tiled
-  tmux split-window -v 'bash'
-  tmux select-layout tiled
   tmux split-window -v 'bash'
   tmux select-layout tiled
   tmux select-pane -t:.1
@@ -45,8 +46,14 @@ layout_2() {
 }
 
 layout_3() {
+  if [ $# -ne 1 ]; then
+    echo "f[${FUNCNAME}]:l[${LINENO}] ERROR: incorrect number of arguments."
+    return 1
+  fi
+
+  local readonly LT_HEIGHT=${1}
   [ -z "${TMUX}" ] && tmux new-session -d -s 'coding' 'bash'
-  tmux split-window -v -l5 'sleep 1; tmux resize-pane -y 9; tmux select-pane -t:.1; bash'
+  tmux split-window -v -l${LT_HEIGHT} "sleep 1; tmux resize-pane -y ${LT_HEIGHT}; tmux select-pane -t:.1; bash"
   tmux split-window -h -p 66 'bash'
   tmux split-window -h -p 50 'bash'
   [ -z "${TMUX}" ] && tmux -2 attach-session -d
@@ -58,12 +65,15 @@ main () {
   DEBUG_MODE='OFF'
   local readonly PROGNAME=`basename $0`
   local START_DIR=''
+  local LT_HEIGHT=15
 
-  while getopts dhs: opts; do
+  while getopts dhs:l: opts; do
     case ${opts} in
       d) DEBUG_MODE='ON'
          ;;
       s) local START_DIR=${OPTARG}
+         ;;
+      l) local LT_HEIGHT=${OPTARG}
          ;;
       h) print_usage ${PROGNAME}
          exit 0
@@ -84,6 +94,7 @@ main () {
   fi
 
   readonly START_DIR
+  readonly LT_HEIGHT
   local readonly LAYOUT=${1}
 
   if [ -n "${START_DIR}" ]; then
@@ -95,11 +106,11 @@ main () {
   fi
 
   case ${LAYOUT} in
-    1) layout_1 || exit 1
+    1) layout_1 ${LT_HEIGHT} || exit 1
       ;;
     2) layout_2 || exit 1
       ;;
-    3) layout_3 || exit 1
+    3) layout_3 ${LT_HEIGHT} || exit 1
       ;;
     *)
       echo "f[${FUNCNAME}]:l[${LINENO}] ERROR: Invalid layout [${LAYOUT}]."
@@ -107,7 +118,6 @@ main () {
       exit 1
       ;;
   esac
-  exit 0
 }
 
 main "$@"
