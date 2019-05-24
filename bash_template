@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 print_usage () {
-  local readonly PROGNAME="${1}"
+  local PROGNAME="${1}"
   if [ -z "${PROGNAME}" ]; then
-    echo "f[${FUNCNAME}]:l[${LINENO}] ERROR: No program name specified."
+    echo "f:${FUNCNAME[0]} l:${LINENO} ERROR: No program name specified."
     return 1
   fi
 
@@ -22,27 +22,28 @@ print_usage () {
 
 main () {
   DEBUG_MODE='OFF'
-  local readonly PROGNAME=`basename $0`
+  local PROGNAME
+  PROGNAME=$(basename "$0")
 
   while getopts dh opts; do
     case ${opts} in
       d) DEBUG_MODE='ON'
          ;;
-      h) print_usage ${PROGNAME}
+      h) print_usage "${PROGNAME}"
          exit 0
          ;;
-      *) print_usage ${PROGNAME}
+      *) print_usage "${PROGNAME}"
          exit 0
          ;;
     esac
   done
-  shift `expr ${OPTIND} - 1`
+  shift "$(( OPTIND - 1 ))"
 
   readonly DEBUG_MODE;
 
   if [ $# -ne 1 ]; then
     echo "ERROR: Wrong number of arguments."
-    print_usage ${PROGNAME}
+    print_usage "${PROGNAME}"
     exit 1
   fi
 
