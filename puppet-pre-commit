@@ -3,4 +3,5 @@ if [ -n "`pwd | grep '/puppet_main_r10k_tng$'`" ]; then
   puppet-lint modules  --no-variable_scope-check
 else
   pdk validate
+  pdk test unit
 fi
