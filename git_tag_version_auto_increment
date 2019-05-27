@@ -60,14 +60,18 @@ print_usage () {
         exit 1;
     fi
 
-    readonly G_LATEST_VER="`git tag -l |\
-                            grep ^${G_PREFIX} |\
-                            sort -V |\
-                            tail -n 1|\
-                            sed s^${G_PREFIX}g`";
+    G_LATEST_VER="`git tag -l |\
+                   grep ^${G_PREFIX} |\
+                   sort -V |\
+                   tail -n 1|\
+                   sed s^${G_PREFIX}g`";
 
     if [ "${G_DEBUG_MODE}" = 'ON' ]; then
         echo "DEBUG: G_LATEST_VER = ${G_LATEST_VER}";
+    fi
+
+    if [ -z "${G_LATEST_VER}" ]; then
+      G_LATEST_VER='0.0.0'
     fi
 
     if [ -z "${G_PREFIX}" ]; then
