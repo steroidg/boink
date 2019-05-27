@@ -1,0 +1,72 @@
+#!/usr/bin/env bash
+
+print_usage () {
+  local PROGNAME="${1}"
+  if [ -z "${PROGNAME}" ]; then
+    echo "f:${FUNCNAME[0]} l:${LINENO} ERROR: No program name specified."
+    return 1
+  fi
+
+  echo "Archive current branch with tag"
+  echo ""
+  echo "Usage: ${PROGNAME} <option>"
+  echo ""
+  echo "  Options:"
+  echo "    -d: Debug mode."
+  echo "    -h: Print out this message."
+
+  return 0
+}
+
+
+main () {
+  DEBUG_MODE='OFF'
+  local PROGNAME
+  PROGNAME=$(basename "$0")
+
+  while getopts dh opts; do
+    case ${opts} in
+      d) DEBUG_MODE='ON'
+         ;;
+      h) print_usage "${PROGNAME}"
+         exit 0
+         ;;
+      *) print_usage "${PROGNAME}"
+         exit 0
+         ;;
+    esac
+  done
+  shift "$(( OPTIND - 1 ))"
+
+  readonly DEBUG_MODE;
+
+  if [ $# -ne 0 ]; then
+    echo "ERROR: Wrong number of arguments."
+    print_usage "${PROGNAME}"
+    exit 1
+  fi
+
+  git fetch || exit 1
+  local CURRENT_BRANCH
+  CURRENT_BRANCH=$(git branch | grep \* | awk -F ' ' '{print $2}')
+
+  if $(git tag -l | grep "${CURRENT_BRANCH}"); then
+    echo "f:${FUNCNAME[0]} l:${LINENO} ERROR: ${CURRENT_BRANCH} already exists."
+    exit 1
+  fi
+
+  echo "WARNING: I'm about to run the following commands:"
+  echo "# git tag -a archive/${CURRENT_BRANCH} -m \"archive of ${CURRENT_BRANCH}\""
+  echo "# git push origin archive/${CURRENT_BRANCH}"
+  echo "Would you like me to proceed? (Y/N)"
+  echo ""
+  read ANSWER;
+  if [ "${ANSWER}" = 'y' -o "${ANSWER}" = 'Y' ]; then
+    git tag -a archive/${CURRENT_BRANCH} -m "archive of ${CURRENT_BRANCH}"
+    git push origin archive/${CURRENT_BRANCH}
+  fi
+
+  exit 0
+}
+
+main "$@"
