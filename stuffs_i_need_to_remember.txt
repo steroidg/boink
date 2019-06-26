@@ -58,6 +58,8 @@ Ubuntu:
   - Enabling vim-puppet after installing: vim-addons -w install puppet
   - Mount initrd images: mount -o loop -t sysfs <initrd_img>
   - Change default editor: sudo update-alternatives --config editor
+  - Evolution gmail fix: '/usr/lib/gnome-online-accounts/goa-daemon --replace &'
+  - Restart gnome-shell: killall -3 gnome-shell
 
 
 Solaris 10 Network Aggregate bug fix:
