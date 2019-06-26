@@ -39,8 +39,8 @@ layout_2() {
   [ -z "${TMUX}" ] && tmux new-session -d -s 'terms' 'bash'
   tmux split-window -h 'bash'
   tmux split-window -v 'bash'
+  tmux select-pane -t:.1
   tmux split-window -v 'bash'
-  tmux select-layout tiled
   tmux select-pane -t:.1
   [ -z "${TMUX}" ] && tmux -2 attach-session -d
 }
