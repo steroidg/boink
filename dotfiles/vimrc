@@ -71,6 +71,7 @@ Plugin 'luochen1990/rainbow'
 Plugin 'pangloss/vim-javascript'
 Plugin 'mhinz/vim-signify'
 Plugin 'ryanoasis/vim-devicons'
+Plugin 'Yggdroot/indentLine'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -83,6 +84,7 @@ execute pathogen#infect()
 set foldmethod=indent
 set foldlevel=99
 
+map <F10> :IndentLinesToggle<CR>
 
 " NERDTree
 "autocmd vimenter * NERDTreeMirror
@@ -109,3 +111,7 @@ let g:rainbow_active = 1 "0 if you want to enable it later via :RainbowToggle
 
 " Real time signify update
 let g:signify_realtime = 1
+
+let g:indentLine_enabled = 0
+let g:indentLine_concealcursor = 'inc'
+let g:indentLine_conceallevel = 2
