@@ -16,7 +16,7 @@ fi
 ssh-keygen -R ${SSH_HOST_NAME} -f "${SSH_KNOWN_HOSTS_FILE}";
 
 SSH_HOST_IP='';
-SSH_HOST_IP=`nslookup ${SSH_HOST_NAME} | grep ^Address: | grep -v "#" | awk '{print $2}' | grep -v "^127"`;
+SSH_HOST_IP=`nslookup -query=A ${SSH_HOST_NAME} | grep ^Address: | grep -v "#" | awk '{print $2}' | grep -v "^127"`;
 
 if [ -n "${SSH_HOST_IP}" ]; then
 	ssh-keygen -R ${SSH_HOST_IP} -f "${SSH_KNOWN_HOSTS_FILE}";

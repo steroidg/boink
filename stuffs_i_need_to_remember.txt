@@ -198,6 +198,8 @@ Puppet trick:
 
 SuSE trick:
   - zypper search -s <pkg_name> will return packages with version number.
+  - Autoyast.xml in /root/autoyast.xml
+  - Generate new autoyast file: yast clone_system
 
 
 Git:
@@ -211,7 +213,7 @@ Git:
   - Push a single tag to remote: git push origin <tag_name>
   - Push all tags to remote: git push origin --tags
   - Reset local branch to remote: git reset --hard origin/<branch_name>
-  - Autoyast.xml in /root/autoyast.xml
+  - Reset (if you want to revert) local branch to commit: get reset --hard <commit_id>
   - Remove remote branch: git push origin --delete <branch_name>
   - Remove local branch: git branch -d <branch_name>
   - Revert commit: git revert <commit_ref>
@@ -222,7 +224,6 @@ Git:
   - Generate nice git log with graph: git log --oneline --graph
   - Configure git on a per repo basis: git config user.email "<email>" && git config user.name "<name>"
 
-
 Systemd:
   - List services: systemctl list-unit-files --type=service
 
@@ -230,9 +231,17 @@ Systemd:
 VM tricks:
   - List all running VM instances: vmrun list
   - Suspend running VM instance: vmrun suspend <full_path_to_vmx>
+  - Run VM in background:  vmrun start <path to .vmx file> nogui
 
 Postgresql:
   - List tables \dt
 
 Vim tricks:
   - Open output of command in new split window `new | 0read ! <command>`
+  - Replace surround with cs<old><new>. By example cs`( to replace `foo` with ( foo )
+  - Surround thing: ysi<thing><surround>. By example ysiw" to surround word with "
+  - Paste buffer in highlighted word: Copy buffer, then `viw` to highlight, then p to paste.
+
+tmux tricks:
+  - kill window (tab): ctrl - b &
+  - kill pane (split): ctrl - b x

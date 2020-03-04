@@ -5,6 +5,9 @@
 
 " Set background to dark so it looks correctly in tmux
 set background=dark
+set hlsearch
+
+set re=1
 
 " Shell code folding
 set nocompatible
@@ -72,6 +75,7 @@ Plugin 'pangloss/vim-javascript'
 Plugin 'mhinz/vim-signify'
 Plugin 'ryanoasis/vim-devicons'
 Plugin 'Yggdroot/indentLine'
+Plugin 'Matt-Deacalion/vim-systemd-syntax'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -92,8 +96,9 @@ map <F10> :IndentLinesToggle<CR>
 map <F9> :NERDTreeMirrorToggle<CR>
 " Current file in nerdtree
 " map <F9> :NERDTreeFind<CR>
-" Auto start NERDTree
-autocmd vimenter * NERDTree
+" Auto start NERDTree and focus on content if no file specified
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | wincmd w | endif
 " Simplified nerdtree view
 let NERDTreeMinimalUI = 1
 " let NERDTreeDirArrows = 1
@@ -115,3 +120,5 @@ let g:signify_realtime = 1
 let g:indentLine_enabled = 0
 let g:indentLine_concealcursor = 'inc'
 let g:indentLine_conceallevel = 2
+
+au BufNewFile,BufRead Jenkinsfile setf groovy

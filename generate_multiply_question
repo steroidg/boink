@@ -6,14 +6,14 @@ AF=./answer_file
 
 CURRENT_NUMBER=0
 while [ ${CURRENT_NUMBER} -le 1 ]; do
-  CURRENT_NUMBER=$(((RANDOM % 12) + 1))
+  CURRENT_NUMBER=$(((RANDOM % 999) + 1))
 done
 CURRENT_RESULT=$((0 + CURRENT_NUMBER))
 CURRENT_STR=$CURRENT_NUMBER
 
 i=0
 while [ $i -lt 1 ]; do
-  OPERATION='x'
+  OPERATION='/'
 
   NEW_NUMBER=0
   while [ ${NEW_NUMBER} -le 1 ]; do
@@ -21,8 +21,13 @@ while [ $i -lt 1 ]; do
   done
   CURRENT_NUMBER=${NEW_NUMBER}
 
-  NEW_RESULT=$((${CURRENT_RESULT} * ${NEW_NUMBER}))
-  CURRENT_STR="$CURRENT_STR $OPERATION $CURRENT_NUMBER"
+  NEW_RESULT=$((${CURRENT_RESULT} ${OPERATION} ${NEW_NUMBER}))
+  if [ "${OPERATION}" == '*' ]; then
+    OPERATION_STR='x'
+  else
+    OPERATION_STR="${OPERATION}"
+  fi
+  CURRENT_STR="${CURRENT_STR} ${OPERATION_STR} ${CURRENT_NUMBER}"
   CURRENT_RESULT=$NEW_RESULT
 
   i=`expr $i + 1`
