@@ -51,13 +51,15 @@ layout_2() {
     fi
 
     # Create new session
-    tmux new-session -s ${SESSION_NAME} 'bash'
+    tmux new-session -d -s ${SESSION_NAME} 'bash'
   fi
+
   tmux split-window -h 'bash'
   tmux split-window -v 'bash'
   tmux select-pane -t:.1
   tmux split-window -v 'bash'
   tmux select-pane -t:.1
+  [ -z "${TMUX}" ] && tmux -2 attach-session -d
   return 0
 }
 
@@ -74,6 +76,31 @@ layout_3() {
   tmux split-window -h -p 50 'bash'
   [ -z "${TMUX}" ] && tmux -2 attach-session -d
 
+  return 0
+}
+
+layout_4() {
+  local SESSION_NAME='chat'
+  # Not in a tmux session
+  if [ -z "${TMUX}" ]; then
+    local SESSION_EXISTS
+    SESSION_EXISTS=$(tmux ls | grep ^${SESSION_NAME})
+
+    if [ -n "${SESSION_EXISTS}" ]; then
+      if ! echo "${SESSION_EXISTS}" | grep -q attached\)$; then
+        # Reattach existing session when not attached
+        tmux -2 attach-session -t ${SESSION_NAME}
+      fi
+      return 0
+    fi
+
+    # Create new session
+    tmux new-session -d -s ${SESSION_NAME} 'irssi'
+    tmux split-window -v -l "${LT_HEIGHT}" "sleep 1; tmux resize-pane -y ${LT_HEIGHT}; tmux select-pane -t:.1; top -d 2"
+    tmux -2 attach-session -d
+  fi
+
+  echo "This layout is meant for new sessions only."
   return 0
 }
 
@@ -131,6 +158,8 @@ main () {
     2) layout_2 || exit 1
       ;;
     3) layout_3 "${LT_HEIGHT}" || exit 1
+      ;;
+    4) layout_4 "${LT_HEIGHT}" || exit 1
       ;;
     *)
       echo "f:${FUNCNAME[0]} l:${LINENO} ERROR: Invalid layout [${LAYOUT}]."
