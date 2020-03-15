@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 print_usage () {
-  local readonly PROGNAME="${1}"
+  local PROGNAME="${1}"
   if [ -z "${PROGNAME}" ]; then
-    echo "f[${FUNCNAME}]:l[${LINENO}] ERROR: No program name specified."
+    echo "f:${FUNCNAME[0]} l:${LINENO} ERROR: No program name specified."
     return 1
   fi
 
@@ -22,13 +22,13 @@ print_usage () {
 
 layout_1() {
   if [ $# -ne 1 ]; then
-    echo "f[${FUNCNAME}]:l[${LINENO}] ERROR: incorrect number of arguments."
+    echo "f:${FUNCNAME[0]} l:${LINENO} ERROR: incorrect number of arguments."
     return 1
   fi
 
-  local readonly LT_HEIGHT=${1}
+  local LT_HEIGHT=${1}
   [ -z "${TMUX}" ] && tmux new-session -d -s 'coding' 'bash'
-  tmux split-window -v -l${LT_HEIGHT} "sleep 1; tmux resize-pane -y ${LT_HEIGHT}; tmux select-pane -t:.1; bash"
+  tmux split-window -v -l "${LT_HEIGHT}" "sleep 1; tmux resize-pane -y ${LT_HEIGHT}; tmux select-pane -t:.1; bash"
   tmux split-window -h 'bash'
   [ -z "${TMUX}" ] && tmux -2 attach-session -d
 
@@ -39,10 +39,11 @@ layout_2() {
   local SESSION_NAME='terms'
   # Not in a tmux session
   if [ -z "${TMUX}" ]; then
-    local SESSION_EXISTS=$(tmux ls | grep ^${SESSION_NAME})
+    local SESSION_EXISTS
+    SESSION_EXISTS=$(tmux ls | grep ^${SESSION_NAME})
 
     if [ -n "${SESSION_EXISTS}" ]; then
-      if ! echo ${SESSION_EXISTS} | grep -q attached\)$; then
+      if ! echo "${SESSION_EXISTS}" | grep -q attached\)$; then
         # Reattach existing session when not attached
         tmux -2 attach-session -t ${SESSION_NAME}
       fi
@@ -62,13 +63,13 @@ layout_2() {
 
 layout_3() {
   if [ $# -ne 1 ]; then
-    echo "f[${FUNCNAME}]:l[${LINENO}] ERROR: incorrect number of arguments."
+    echo "f:${FUNCNAME[0]} l:${LINENO} ERROR: incorrect number of arguments."
     return 1
   fi
 
-  local readonly LT_HEIGHT=${1}
+  local LT_HEIGHT=${1}
   [ -z "${TMUX}" ] && tmux new-session -d -s 'coding' 'bash'
-  tmux split-window -v -l${LT_HEIGHT} "sleep 1; tmux resize-pane -y ${LT_HEIGHT}; tmux select-pane -t:.1; bash"
+  tmux split-window -v -l "${LT_HEIGHT}" "sleep 1; tmux resize-pane -y ${LT_HEIGHT}; tmux select-pane -t:.1; bash"
   tmux split-window -h -p 66 'bash'
   tmux split-window -h -p 50 'bash'
   [ -z "${TMUX}" ] && tmux -2 attach-session -d
@@ -78,7 +79,8 @@ layout_3() {
 
 main () {
   DEBUG_MODE='OFF'
-  local readonly PROGNAME=`basename $0`
+  local PROGNAME
+  PROGNAME=$(basename "${0}")
   local START_DIR=''
   local LT_HEIGHT=15
 
@@ -90,46 +92,49 @@ main () {
          ;;
       l) local LT_HEIGHT=${OPTARG}
          ;;
-      h) print_usage ${PROGNAME}
+      h) print_usage "${PROGNAME}"
          exit 0
          ;;
-      *) print_usage ${PROGNAME}
+      *) print_usage "${PROGNAME}"
          exit 0
          ;;
     esac
   done
-  shift `expr ${OPTIND} - 1`
+  shift "$(( OPTIND - 1 ))"
 
   readonly DEBUG_MODE;
 
   if [ $# -lt 1 ]; then
     echo "ERROR: Wrong number of arguments."
-    print_usage ${PROGNAME}
+    print_usage "${PROGNAME}"
     exit 1
   fi
 
   readonly START_DIR
   readonly LT_HEIGHT
-  local readonly LAYOUT=${1}
+  local LAYOUT=${1}
 
   if [ -n "${START_DIR}" ]; then
-    if [ ! -d ${START_DIR} ]; then
-      echo "f[${FUNCNAME}]:l[${LINENO}] ERROR: ${START_DIR} is not a directory."
+    if [ ! -d "${START_DIR}" ]; then
+      echo "f:${FUNCNAME[0]} l:${LINENO} ERROR: ${START_DIR} is not a directory."
       exit 1
     fi
-    cd ${START_DIR}
+    if ! cd "${START_DIR}"; then
+      echo "f:${FUNCNAME[0]} l:${LINENO} ERROR: Unable to cd to ${START_DIR}."
+      exit 1
+    fi
   fi
 
   case ${LAYOUT} in
-    1) layout_1 ${LT_HEIGHT} || exit 1
+    1) layout_1 "${LT_HEIGHT}" || exit 1
       ;;
     2) layout_2 || exit 1
       ;;
-    3) layout_3 ${LT_HEIGHT} || exit 1
+    3) layout_3 "${LT_HEIGHT}" || exit 1
       ;;
     *)
-      echo "f[${FUNCNAME}]:l[${LINENO}] ERROR: Invalid layout [${LAYOUT}]."
-      print_usage ${PROGNAME}
+      echo "f:${FUNCNAME[0]} l:${LINENO} ERROR: Invalid layout [${LAYOUT}]."
+      print_usage "${PROGNAME}"
       exit 1
       ;;
   esac
