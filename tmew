@@ -36,13 +36,28 @@ layout_1() {
 }
 
 layout_2() {
-  [ -z "${TMUX}" ] && tmux new-session -d -s 'terms' 'bash'
+  local SESSION_NAME='terms'
+  # Not in a tmux session
+  if [ -z "${TMUX}" ]; then
+    local SESSION_EXISTS=$(tmux ls | grep ^${SESSION_NAME})
+
+    if [ -n "${SESSION_EXISTS}" ]; then
+      if ! echo ${SESSION_EXISTS} | grep -q attached\)$; then
+        # Reattach existing session when not attached
+        tmux -2 attach-session -t ${SESSION_NAME}
+      fi
+      return 0
+    fi
+
+    # Create new session
+    tmux new-session -s ${SESSION_NAME} 'bash'
+  fi
   tmux split-window -h 'bash'
   tmux split-window -v 'bash'
   tmux select-pane -t:.1
   tmux split-window -v 'bash'
   tmux select-pane -t:.1
-  [ -z "${TMUX}" ] && tmux -2 attach-session -d
+  return 0
 }
 
 layout_3() {
