@@ -96,7 +96,7 @@ layout_4() {
 
     # Create new session
     tmux new-session -d -s ${SESSION_NAME} 'irssi'
-    tmux split-window -v -l "${LT_HEIGHT}" "sleep 1; tmux resize-pane -y ${LT_HEIGHT}; tmux select-pane -t:.1; top -d 2"
+    tmux split-window -v -l "${LT_HEIGHT}" "sleep 1; tmux resize-pane -y ${LT_HEIGHT}; tmux select-pane -t:.1; top"
     tmux -2 attach-session -d
     return 0
   fi
