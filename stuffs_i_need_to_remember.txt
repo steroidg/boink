@@ -35,6 +35,7 @@ Shell:
   - PID of last command echo $!.
   - PID of current command echo $$.
   - Remap keyboard key: xmodmap -e "keycode <keycode_number> = <key_function>"
+  - Look for UTF-8/unicode characters in files `grep -axv '.*' <file_name>`
 
 
 Awk:
