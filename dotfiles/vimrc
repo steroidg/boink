@@ -122,3 +122,5 @@ let g:indentLine_concealcursor = 'inc'
 let g:indentLine_conceallevel = 2
 
 au BufNewFile,BufRead Jenkinsfile setf groovy
+" colorscheme default
+colorscheme zellner
