@@ -76,6 +76,7 @@ Plugin 'mhinz/vim-signify'
 Plugin 'ryanoasis/vim-devicons'
 Plugin 'Yggdroot/indentLine'
 Plugin 'Matt-Deacalion/vim-systemd-syntax'
+Plugin 'sonph/onehalf', {'rtp': 'vim/'}
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -123,4 +124,7 @@ let g:indentLine_conceallevel = 2
 
 au BufNewFile,BufRead Jenkinsfile setf groovy
 " colorscheme default
-colorscheme zellner
+colorscheme desert
+" colorscheme zellner
+" colorscheme onehalflight
+" let g:airline_theme='onehalfdark'

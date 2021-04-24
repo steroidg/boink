@@ -1,8 +1,4 @@
-Shell:
-  - To not have space as delimeter in a for loop use IFS=$'\n'.
-  - To use TAB as delimeter for cut do <CTRL-V> TAB.
-  - Expr can't do fractions, use bc instead.
-  - The output of some commands have extra whitespaces that's hard to get rid of. However, if you put the output to a variable, and echo that variable without quote, it's delimited with a single space.
+Sed:
   - Remove leading whitespaces: sed -e 's/^[ \t]*//'.
   - Remove ending whitespaces: sed -e 's/[ \t]*$//'.
   - Remove line with sed: sed '/PATTERN/d'.
@@ -11,6 +7,13 @@ Shell:
   - Remove first word of line: sed -e 's/^\w*\ *//'.
   - In place replace with sed: sed -i s/<foo>/<bar> <file>.
   - Replace multiple spaces with 1: sed 's/  */ /g'
+  - Append string after match: sed 's/<match_str>/a <append_str>' <file_name>
+
+Shell:
+  - To not have space as delimeter in a for loop use IFS=$'\n'.
+  - To use TAB as delimeter for cut do <CTRL-V> TAB.
+  - Expr can't do fractions, use bc instead.
+  - The output of some commands have extra whitespaces that's hard to get rid of. However, if you put the output to a variable, and echo that variable without quote, it's delimited with a single space.
   - Remove leading N characters: cut -c N-.
   - Print current function name: echo "${FUNCNAME}".
   - Easy way to get date: DATE=`date +%Y%m%d%H%M%S`.
@@ -36,6 +39,8 @@ Shell:
   - PID of current command echo $$.
   - Remap keyboard key: xmodmap -e "keycode <keycode_number> = <key_function>"
   - Look for UTF-8/unicode characters in files `grep -axv '.*' <file_name>`
+  -xv '.*' eilter out non special characters from variable FOO: BAR=${FOO//[^[:alnum:]_]/}
+# shellcheck disable=SC2181
 
 
 Awk:
@@ -45,6 +50,7 @@ Awk:
   - Print value between square brackets: awk -F '[][]' '{print $2}'
   - Print n lines after a str match: awk '$0 == "<match_str>" {i=1;next};i && i++ <= <n_lines>' <file>
   - Print n lines after a regex match: awk 'match($i, /<regex>/) {i=1;next};i && i++ <= <n_lines>' <file>
+  - Replace grep: awk '/<regex>/ {action}'
 
 
 Ubuntu:
@@ -168,6 +174,8 @@ General linux:
   - Remove IPv6 address from interface: ip -6 addr del <ipv6address>/<prefixlength> dev <interface>
   - Add user into group: usermod -a -G <group_name> <user>
   - Make json readable: <json_output> | python -m json.tool
+  - Check account expiration status of local user: chage -l <user_name>
+  - Sudo with redirect: sudo sh -c '<command> > <file>'
 
 
 Misc:

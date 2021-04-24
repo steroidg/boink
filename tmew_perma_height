@@ -9,8 +9,8 @@ print_usage () {
 
   echo "Purpose of the script"
   echo ""
-  echo "Usage: ${PROGNAME} <option> arg"
-  echo "    arg: arg description"
+  echo "Usage: ${PROGNAME} <option> height"
+  echo "    height: height of terminal"
   echo ""
   echo "  Options:"
   echo "    -h: Print out this message."
@@ -20,14 +20,11 @@ print_usage () {
 
 
 main () {
-  DEBUG_MODE='OFF'
   local PROGNAME
   PROGNAME=$(basename "$0")
 
   while getopts dh opts; do
     case ${opts} in
-      d) DEBUG_MODE='ON'
-         ;;
       h) print_usage "${PROGNAME}"
          exit 0
          ;;
@@ -38,13 +35,28 @@ main () {
   done
   shift "$(( OPTIND - 1 ))"
 
-  readonly DEBUG_MODE;
-
   if [ $# -ne 1 ]; then
     echo "ERROR: Wrong number of arguments."
     print_usage "${PROGNAME}"
     exit 1
   fi
+
+  local LT_HEIGHT=${1}
+  local INITIAL_WINDOW=$(tmux display-message -p '#I')
+
+  # Not a tmux session
+  [ -z "${TMUX}" ] && exit 0
+
+  # Single window session not resizing
+  [ "$(tmux list-panes | wc -l)" -lt 2 ] && exit 0
+    
+  while true; do
+    local CURRENT_WINDOW=$(tmux display-message -p '#I')
+    if [ "${CURRENT_WINDOW}" -eq "${INITIAL_WINDOW}" ]; then
+      tmux resize-pane  -y ${LT_HEIGHT}
+    fi
+    sleep 5
+  done
 
   exit 0
 }

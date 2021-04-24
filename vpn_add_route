@@ -1,0 +1,7 @@
+#!/bin/bash
+
+VPNIP=$(ip route | grep 'dev vpn' | cut -d ' ' -f 1)
+
+for i in ${VPNIP}; do
+  sudo ip route add default via ${i}
+done
