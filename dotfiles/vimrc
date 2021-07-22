@@ -76,6 +76,7 @@ Plugin 'mhinz/vim-signify'
 Plugin 'ryanoasis/vim-devicons'
 Plugin 'Yggdroot/indentLine'
 Plugin 'Matt-Deacalion/vim-systemd-syntax'
+Plugin 'preservim/vimux'
 Plugin 'sonph/onehalf', {'rtp': 'vim/'}
 
 " All of your Plugins must be added before the following line
@@ -128,3 +129,13 @@ colorscheme desert
 " colorscheme zellner
 " colorscheme onehalflight
 " let g:airline_theme='onehalfdark'
+"
+
+" Prompt for a command to run
+map <Leader>vp :VimuxPromptCommand<CR>
+" Run last command executed by VimuxRunCommand
+map <Leader>vl :VimuxRunLastCommand<CR>
+" Inspect runner pane
+map <Leader>vi :VimuxInspectRunner<CR>
+" Zoom the tmux runner pane
+map <leader>vz :VimuxZoomRunner<CR>
