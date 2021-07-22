@@ -1,0 +1,97 @@
+#!/usr/bin/env bash
+
+print_usage () {
+  local PROGNAME="${1}"
+  if [ -z "${PROGNAME}" ]; then
+    echo "f:${FUNCNAME[0]} l:${LINENO} ERROR: No program name specified."
+    return 1
+  fi
+
+  echo "Purpose of the script"
+  echo ""
+  echo "Usage: ${PROGNAME} <option> year"
+  echo "    year: Year of the generated data"
+  echo ""
+  echo "  Options:"
+  echo "    -h: Print out this message."
+
+  return 0
+}
+
+
+main () {
+  DEBUG_MODE='OFF'
+  local PROGNAME
+  PROGNAME=$(basename "$0")
+
+  while getopts dh opts; do
+    case ${opts} in
+      d) DEBUG_MODE='ON'
+         ;;
+      h) print_usage "${PROGNAME}"
+         exit 0
+         ;;
+      *) print_usage "${PROGNAME}"
+         exit 0
+         ;;
+    esac
+  done
+  shift "$(( OPTIND - 1 ))"
+
+  readonly DEBUG_MODE;
+
+  if [ $# -ne 1 ]; then
+    echo "ERROR: Wrong number of arguments."
+    print_usage "${PROGNAME}"
+    exit 1
+  fi
+
+  CURRENT_YEAR=${1}
+  NEXT_YEAR=$(($CURRENT_YEAR + 1))
+  CAL_LIST=()
+
+  i=6
+  while [ ${i} -ge 1 ]; do
+    CAL_LIST+=("${i} ${NEXT_YEAR}")
+    i=$(($i - 1))
+  done
+
+  i=12
+  while [ ${i} -ge 7 ]; do
+    CAL_LIST+=("${i} ${CURRENT_YEAR}")
+    i=$(($i - 1))
+  done
+
+
+  for i in "${CAL_LIST[@]}"; do
+    M=$(echo ${i} | awk '{print $1}' | sed 's/^ *//g')
+    M=$(printf "%02d" "${M}" )
+    Y=$(echo ${i} | awk '{print $2}')
+    M_STR=$(ncal -h ${i} | grep '^ ' | sed 's/^ *//g')
+    THURSDAYS=$(ncal -h ${i} | grep ^Th | sed s/Th//)
+    THURSDAYS_REVERSE=$(echo ${THURSDAYS} | tr ' ' '\n' | sort -n -r)
+    for j in ${THURSDAYS_REVERSE}; do
+      j=$(printf "%02d" "${j}" )
+#      echo "[${j}][${M}][${Y}]"
+      cat << EOF
+<h4>
+  <span style="color: rgb(0,153,204);">${j} ${M_STR}</span>
+</h4>
+<ac:structured-macro ac:macro-id="6394f1ce-01d1-4c39-8553-a30993866ecb" ac:name="multiexcerpt" ac:schema-version="1">
+  <ac:parameter ac:name="MultiExcerptName">${j}${M}${Y}</ac:parameter>
+  <ac:parameter ac:name="atlassian-macro-output-type">BLOCK</ac:parameter>
+  <ac:rich-text-body>
+    <ul>
+      <li> </li>
+    </ul>
+  </ac:rich-text-body>
+</ac:structured-macro>
+EOF
+    done
+  done
+
+
+  exit 0
+}
+
+main "$@"
