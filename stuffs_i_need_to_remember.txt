@@ -174,6 +174,9 @@ General linux:
   - Remove IPv6 address from interface: ip -6 addr del <ipv6address>/<prefixlength> dev <interface>
   - Add user into group: usermod -a -G <group_name> <user>
   - Make json readable: <json_output> | python -m json.tool
+  - Make json readable: <json_output> | jq
+  - Obtain data from json: <json_output> | jq -r .<key_name>
+  - jq with conditional: <json_output> | jq -r '.[] | select(.<condition_key>=="<condition_value>") .<key_name>'
   - Check account expiration status of local user: chage -l <user_name>
   - Sudo with redirect: sudo sh -c '<command> > <file>'
 
@@ -232,6 +235,8 @@ Git:
   - To close a github issue, use 'Close #<issue_number>' in commit message.
   - Generate nice git log with graph: git log --oneline --graph
   - Configure git on a per repo basis: git config user.email "<email>" && git config user.name "<name>"
+  - Generate nice git oneline log with time stamp: git log --pretty=format:"%h%x09%an%x09%ad%x09%s"
+
 
 Systemd:
   - List services: systemctl list-unit-files --type=service

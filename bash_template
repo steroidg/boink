@@ -13,6 +13,7 @@ print_usage () {
   echo "    arg: arg description"
   echo ""
   echo "  Options:"
+  echo "    -d: Print debug messages."
   echo "    -h: Print out this message."
 
   return 0
@@ -20,13 +21,13 @@ print_usage () {
 
 
 main () {
-  DEBUG_MODE='OFF'
+  DEBUG_MODE=false
   local PROGNAME
   PROGNAME=$(basename "$0")
 
   while getopts dh opts; do
     case ${opts} in
-      d) DEBUG_MODE='ON'
+      d) DEBUG_MODE=true
          ;;
       h) print_usage "${PROGNAME}"
          exit 0
@@ -39,6 +40,8 @@ main () {
   shift "$(( OPTIND - 1 ))"
 
   readonly DEBUG_MODE;
+
+  $DEBUG_MODE && echo "[DEBUG]: message"
 
   if [ $# -ne 1 ]; then
     echo "ERROR: Wrong number of arguments."

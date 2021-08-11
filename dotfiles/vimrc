@@ -139,3 +139,9 @@ map <Leader>vl :VimuxRunLastCommand<CR>
 map <Leader>vi :VimuxInspectRunner<CR>
 " Zoom the tmux runner pane
 map <leader>vz :VimuxZoomRunner<CR>
+
+" Using matched add should just highlight the character as it slops over the  80 column.
+" This is alternative to having the whole column  highlighed
+" Add the . to the regex to exclude a linefeed character, a little nicer :)
+autocmd bufenter * call matchadd('ColorColumn','\%81v.',100)
+autocmd bufenter * call matchadd('ColorColumn','\%121v.',100)
