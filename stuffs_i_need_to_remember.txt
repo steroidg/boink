@@ -147,7 +147,8 @@ ssh tricks:
 
 
 General linux:
-  - To save within the less command: s file_name.
+  - Save within the less command: s file_name.
+  - Show line number within less: -N.
   - Blowfish shadow needs pam_unix2.so. Add it in /etc/pam.d/common-auth.
   - Add key to apt repo: apt-key adv --keyserver keyserver.ubuntu.com --recv-keys <key>
   - X11 forwarding in sudo: COOKIE=`xauth list`; sudo -E xauth add ${COOKIE}; sudo -E su
@@ -259,3 +260,8 @@ Vim tricks:
 tmux tricks:
   - kill window (tab): ctrl - b &
   - kill pane (split): ctrl - b x
+  - In case terminal stops updating, run: reset
+
+Powershell:
+  - Wget/curl equivalent: Invoke-WebRequest -Uri '<uri>' -OutFile '<output_file>'
+  - Stop service: sc stop <service_name>
