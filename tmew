@@ -25,6 +25,8 @@ layout_1() {
     echo "f:${FUNCNAME[0]} l:${LINENO} ERROR: incorrect number of arguments."
     return 1
   fi
+
+  local LT_HEIGHT=${1}
   local N_PANES=$(tmux list-panes | wc -l)
 
   case ${N_PANES} in
