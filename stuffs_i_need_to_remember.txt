@@ -39,6 +39,7 @@ Shell:
   - PID of current command echo $$.
   - Remap keyboard key: xmodmap -e "keycode <keycode_number> = <key_function>"
   - Look for UTF-8/unicode characters in files `grep -axv '.*' <file_name>`
+  - New line for use in variables(useful for multi-line input): $'\n'
   -xv '.*' eilter out non special characters from variable FOO: BAR=${FOO//[^[:alnum:]_]/}
 # shellcheck disable=SC2181
 
@@ -179,6 +180,7 @@ General linux:
   - Obtain data from json: <json_output> | jq -r .<key_name>
   - jq with conditional: <json_output> | jq -r '.[] | select(.<condition_key>=="<condition_value>") .<key_name>'
   - Check account expiration status of local user: chage -l <user_name>
+  - Set local account to never expire: chage -I -1 -M -1 -E -1 <user_name>
   - Sudo with redirect: sudo sh -c '<command> > <file>'
 
 
@@ -256,6 +258,8 @@ Vim tricks:
   - Replace surround with cs<old><new>. By example cs`( to replace `foo` with ( foo )
   - Surround thing: ysi<thing><surround>. By example ysiw" to surround word with "
   - Paste buffer in highlighted word: Copy buffer, then `viw` to highlight, then p to paste.
+  - Manually set syntax highlighting: `:set syntax=<language>`
+  - Reset split size to equel Ctrl-W =
 
 tmux tricks:
   - kill window (tab): ctrl - b &
@@ -265,3 +269,12 @@ tmux tricks:
 Powershell:
   - Wget/curl equivalent: Invoke-WebRequest -Uri '<uri>' -OutFile '<output_file>'
   - Stop service: sc stop <service_name>
+  - Test port `Test-NetConnection -ComputerName <host/ip> -Port <port>`
+  - Show all network connections `ipconfig /all`
+  - Reset user password:
+      $user = "nexus\user"
+      $newPass = "somepass"
+      Set-ADAccountPassword -Identity $user -Reset -NewPassword (ConvertTo-SecureString -AsPlainText "$newPass" -Force)
+
+Vault:
+  - VAULT_ADDR=<vault_instance_uri>; vault login -method=<chosen method such as oidc>
