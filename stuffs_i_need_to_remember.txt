@@ -40,6 +40,7 @@ Shell:
   - Remap keyboard key: xmodmap -e "keycode <keycode_number> = <key_function>"
   - Look for UTF-8/unicode characters in files `grep -axv '.*' <file_name>`
   - New line for use in variables(useful for multi-line input): $'\n'
+  - Truncate file: ': > <filename>'
   -xv '.*' eilter out non special characters from variable FOO: BAR=${FOO//[^[:alnum:]_]/}
 # shellcheck disable=SC2181
 
