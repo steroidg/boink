@@ -60,8 +60,10 @@ print_usage () {
         exit 1;
     fi
 
+    # grep -v '^[^.]*\..*\.[^.].*\.' is to filter out calver entries
     G_LATEST_VER="`git tag -l |\
                    grep ^${G_PREFIX} |\
+                   grep -v  '^[^.]*\..*\.[^.].*\.' |\
                    sort -V |\
                    tail -n 1|\
                    sed s^${G_PREFIX}g`";
