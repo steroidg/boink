@@ -146,3 +146,5 @@ map <leader>vz :VimuxZoomRunner<CR>
 " Add the . to the regex to exclude a linefeed character, a little nicer :)
 autocmd bufenter * call matchadd('ColorColumn','\%81v.',100)
 autocmd bufenter * call matchadd('ColorColumn','\%121v.',100)
+autocmd BufNewFile,BufRead *.groovy set syntax=groovy
+autocmd BufNewFile,BufRead Jenkinsfile* set syntax=groovy
