@@ -1,13 +1,3 @@
-Awk:
-  - Print Nth argument: awk -F<delimiter> '{print $N}'.
-  - Print last argument: awk -F<delimiter> '{print $(NF)}'
-  - Print value between brackets: awk -F '[()]' '{print $2}'
-  - Print value between square brackets: awk -F '[][]' '{print $2}'
-  - Print n lines after a str match: awk '$0 == "<match_str>" {i=1;next};i && i++ <= <n_lines>' <file>
-  - Print n lines after a regex match: awk 'match($i, /<regex>/) {i=1;next};i && i++ <= <n_lines>' <file>
-  - Replace grep: awk '/<regex>/ {action}'
-
-
 Ubuntu:
   - Don't name files with dot (.) in /etc/cron.d on Ubuntu.
   - On Ubuntu, rescan-scsi-bus.sh is in the scsitools package
@@ -89,55 +79,6 @@ Apache tricks:
   - If apache doesn't recognize a new host name, restart nscd.
 
 
-ssh tricks:
-  - Force ssh to use password: ssh -o PubkeyAuthentication=no user@machine
-  - ssh without checking hostkey: ssh -o StrictHostKeyChecking=no user@machine
-  - Prevent password prompt: ssh -o BatchMode=yes user@machine
-  - Generate a ssh key: ssh-keygen -t rsa -b 4096
-  - Run ssh command at backgroud: ssh <user>@<host> 'nohup <prog_name> > foo.out 2> foo.err < /dev/null &'
-  - Reset ssh passphrase: ssh-keygen -f id_rsa -p
-  - Regenerate pub key: ssh-keygen -y -f ~/.ssh/id_rsa > ~/.ssh/id_rsa.pub
-  - Convert a ssh pub key to correct format: ssh-keygen -i -f <pub_key>
-  - ssh/scp into vagrant: ssh $(vagrant ssh-config | awk 'NR>1 {print " -o "$1"="$2}') localhost
-
-
-General linux:
-  - Save within the less command: s file_name.
-  - Show line number within less: -N.
-  - Blowfish shadow needs pam_unix2.so. Add it in /etc/pam.d/common-auth.
-  - Add key to apt repo: apt-key adv --keyserver keyserver.ubuntu.com --recv-keys <key>
-  - X11 forwarding in sudo: COOKIE=`xauth list`; sudo -E xauth add ${COOKIE}; sudo -E su
-  - Mount vfat with Chinese charaters: mount -t vfat -o iocharset=utf8 <device> <mount_point>
-  - To rescan SCSI bus for 7+ devices: "rescan-scsi-bus.sh -w".
-  - To rescan all SCSI `for i in /sys/class/scsi_host/host*; do [ -d $i ] && echo "- - -" > $i/scan; done` .
-  - To detech SCSC disk size change: echo 1 > /sys/class/scsi_device/0\:0\:1\:0/device/rescan
-  - Find out which scsi device is which disk: ls -ld /sys/block/sd*/device
-  - List all installed packages in RPM repository: rpm -qa
-  - Rename screen session: Ctrl-a :sessionname <session_name>
-  - RPC service list: /etc/rpc
-  - Disable Wacom tablet touch "xsetwacom --set "Wacom Bamboo 2FG 6x8 Finger touch" touch off".
-  - Securely wipe drive use: shred
-  - If uuid don't apper after creating a new fs, run: udevadm trigger.
-  - If file system is being filled for no apparent reason. Run: "lsof" to see which files are open.
-  - Convert video file to mp3: /usr/bin/avconv -i <input_video_file> -y -v 0 -strict experimental -ab 256k -f mp3 <output_mp3_file>
-  - grc can colour command outputs: grc cat /var/log/syslog
-  - ntpq -p will show the status of ntpd.
-  - To apply sysctl.conf setting: sysctl -w <item>=<value>.
-  - Change upper to lower case, pipe to: tr '[:upper:]' '[:lower:]'.
-  - Create multiple directories: mkdir {dir1,dir2,dir3}
-  - Join server to AD: net ads join -U <uname> computername=<OU/host_name>
-  - wget with IPv6 IP, put IP between []. I.e.: wget http://[IPv6_IP].
-  - Remove IPv6 address from interface: ip -6 addr del <ipv6address>/<prefixlength> dev <interface>
-  - Add user into group: usermod -a -G <group_name> <user>
-  - Make json readable: <json_output> | python -m json.tool
-  - Make json readable: <json_output> | jq
-  - Obtain data from json: <json_output> | jq -r .<key_name>
-  - jq with conditional: <json_output> | jq -r '.[] | select(.<condition_key>=="<condition_value>") .<key_name>'
-  - Check account expiration status of local user: chage -l <user_name>
-  - Set local account to never expire: chage -I -1 -M -1 -E -1 <user_name>
-  - Sudo with redirect: sudo sh -c '<command> > <file>'
-
-
 Misc:
   - Server Ops costcode 8278
   - Training costcode 8202
@@ -159,12 +100,6 @@ DRAC:
   - Find out the DRAC IP from command line: racadm getniccfg
 
 
-Puppet trick:
-  - Set ca_ttl = 20y in [master] section to extend the ttl of puppet ca.
-  - 'puppet node deactivate <nodename>' to get rid of everything in puppetdb.
-  - Deprecated: 'puppet doc -r type' to generate all puppet documentation.
-
-
 SuSE trick:
   - zypper search -s <pkg_name> will return packages with version number.
   - Autoyast.xml in /root/autoyast.xml
@@ -182,29 +117,3 @@ VM tricks:
 
 Postgresql:
   - List tables \dt
-
-Vim tricks:
-  - Open output of command in new split window `new | 0read ! <command>`
-  - Replace surround with cs<old><new>. By example cs`( to replace `foo` with ( foo )
-  - Surround thing: ysi<thing><surround>. By example ysiw" to surround word with "
-  - Paste buffer in highlighted word: Copy buffer, then `viw` to highlight, then p to paste.
-  - Manually set syntax highlighting: `:set syntax=<language>`
-  - Reset split size to equel Ctrl-W =
-
-tmux tricks:
-  - kill window (tab): ctrl - b &
-  - kill pane (split): ctrl - b x
-  - In case terminal stops updating, run: reset
-
-Powershell:
-  - Wget/curl equivalent: Invoke-WebRequest -Uri '<uri>' -OutFile '<output_file>'
-  - Stop service: sc stop <service_name>
-  - Test port `Test-NetConnection -ComputerName <host/ip> -Port <port>`
-  - Show all network connections `ipconfig /all`
-  - Reset user password:
-      $user = "nexus\user"
-      $newPass = "somepass"
-      Set-ADAccountPassword -Identity $user -Reset -NewPassword (ConvertTo-SecureString -AsPlainText "$newPass" -Force)
-
-Vault:
-  - VAULT_ADDR=<vault_instance_uri>; vault login -method=<chosen method such as oidc>
