@@ -1,14 +1,32 @@
 return {
   'lewis6991/gitsigns.nvim',
-  config = function()
-    require('gitsigns').setup()
-    -- Toggle Gutter Signs
-    vim.keymap.set('n', '<F7>', function() require('gitsigns').toggle_signs() end, { desc = "Toggle Git Signs" })
+  opts = {
+    on_attach = function(bufnr)
+      local gs = package.loaded.gitsigns
 
-    -- Optional: Toggle Word Diff (highlights exact words changed within a line)
-    vim.keymap.set('n', '<leader>tw', function() require('gitsigns').toggle_word_diff() end, { desc = "Toggle Git Word Diff" })
+      local function map(mode, l, r, opts)
+        opts = opts or {}
+        opts.buffer = bufnr
+        vim.keymap.set(mode, l, r, opts)
+      end
 
-    -- Optional: Toggle Line Blame (shows who edited the current line next to the cursor)
-    vim.keymap.set('n', '<leader>tb', function() require('gitsigns').toggle_current_line_blame() end, { desc = "Toggle Git Blame Line" })
-  end
+      -- Navigation between hunks
+      map('n', ']c', function()
+        if vim.api.nvim_get_option_value('diff', {}) then return ']c' end
+        vim.schedule(function() gs.next_hunk() end)
+        return '<Ignore>'
+      end, {expr=true, desc = "Next Hunk"})
+
+      map('n', '[c', function()
+        if vim.api.nvim_get_option_value('diff', {}) then return '[c' end
+        vim.schedule(function() gs.prev_hunk() end)
+        return '<Ignore>'
+      end, {expr=true, desc = "Prev Hunk"})
+
+      -- Toggles
+      map('n', '<F7>', gs.toggle_signs, { desc = "Toggle Git Signs" })
+      map('n', '<leader>tb', gs.toggle_current_line_blame, { desc = "Toggle Git Blame" })
+      map('n', '<leader>tw', gs.toggle_word_diff, { desc = "Toggle Git Word Diff" })
+    end
+  }
 }
