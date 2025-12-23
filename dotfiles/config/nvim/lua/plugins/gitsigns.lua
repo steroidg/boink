@@ -1,6 +1,9 @@
 return {
   'lewis6991/gitsigns.nvim',
   opts = {
+    -- Enable word diff by default
+    word_diff = true,
+
     on_attach = function(bufnr)
       local gs = package.loaded.gitsigns
 
