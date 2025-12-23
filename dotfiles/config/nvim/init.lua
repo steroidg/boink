@@ -1,7 +1,13 @@
 
+-- Lazy plugin manager
+require("config.lazy")
+
 -- Show white space characters
 vim.opt.list = true
 vim.opt.listchars = {tab = '»·', trail = '•', extends = '>', precedes = '<' }
+
+-- Keymap file
+require("config.keymaps")
 
 -- Mark trailing white space as red.
 vim.cmd([[
@@ -19,5 +25,3 @@ vim.opt.shiftwidth = 2
 vim.opt.softtabstop = 2
 
 
--- Lazy plugin manager
-require("config.lazy")
