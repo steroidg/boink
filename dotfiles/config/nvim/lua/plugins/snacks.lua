@@ -35,5 +35,9 @@ return {
       -- statuscolumn = { enabled = true },
       -- words = { enabled = true },
     },
+    -- Toggle Snacks Indentation Guides with F12
+    vim.keymap.set("n", "<F12>", function()
+      Snacks.toggle.indent():toggle()
+    end, { desc = "Toggle Indent Lines" })
   }
 }
