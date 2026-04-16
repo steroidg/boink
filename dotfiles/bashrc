@@ -132,3 +132,7 @@ if [ -f `which powerline-daemon` ]; then
   POWERLINE_BASH_SELECT=1
   . /usr/share/powerline/bindings/bash/powerline.sh
 fi
+
+if [ -x "$(which xset)" ]; then
+  xset r rate 250 100
+fi
