@@ -24,4 +24,5 @@ vim.opt.shiftwidth = 2
 -- Makes 'Tab' key insert 2 spaces
 vim.opt.softtabstop = 2
 
-
+-- Make tab completion similar to bash
+vim.opt.wildmode = "list:longest"
