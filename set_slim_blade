@@ -1,0 +1,72 @@
+#!/usr/bin/env bash
+
+print_usage () {
+  local PROGNAME="${1}"
+  if [ -z "${PROGNAME}" ]; then
+    echo "f:${FUNCNAME[0]} l:${LINENO} ERROR: No program name specified."
+    return 1
+  fi
+
+  echo "Remap the buttons on the SlimBlade Pro mouse."
+  echo ""
+  echo "Usage: ${PROGNAME} <option> action"
+  echo "    action: The action to perform. Valid actions are:"
+  echo "      r|right: Map the right button to the left button."
+  echo "      l|left: Map the left button to the right button."
+  echo ""
+  echo "  Options:"
+  echo "    -d: Print debug messages."
+  echo "    -h: Print out this message."
+
+  return 0
+}
+
+
+main () {
+  DEBUG_MODE=false
+  local PROGNAME
+  PROGNAME=$(basename "$0")
+
+  while getopts dh opts; do
+    case ${opts} in
+      d) DEBUG_MODE=true
+         ;;
+      h) print_usage "${PROGNAME}"
+         exit 0
+         ;;
+      *) print_usage "${PROGNAME}"
+         exit 0
+         ;;
+    esac
+  done
+  shift "$(( OPTIND - 1 ))"
+
+  readonly DEBUG_MODE;
+
+  $DEBUG_MODE && echo "[DEBUG]: message"
+
+  if [ $# -ne 1 ]; then
+    echo "ERROR: Wrong number of arguments."
+    print_usage "${PROGNAME}"
+    exit 1
+  fi
+
+  local ACTION="${1}"
+  case ${ACTION} in
+    r|right)
+      xinput set-button-map "SlimBlade Pro"  1 2 3 4 5 6 7 8 9
+      ;;
+    l|left)
+      xinput set-button-map "SlimBlade Pro"  3 8 1 4 5 6 7 2 9
+      ;;
+    *)
+      echo "ERROR: Invalid action specified."
+      print_usage "${PROGNAME}"
+      exit 1
+      ;;
+  esac
+
+  exit 0
+}
+
+main "$@"
